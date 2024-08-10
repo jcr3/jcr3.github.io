@@ -13,7 +13,8 @@ snakeSpriteSheet.src = 'images/ascii_8.png';
 
 let cols = 288,
     spriteWidth = snakeSpriteSheet.width / cols,
-    spriteHeight = spriteWidth;
+    spriteHeight = spriteWidth,
+    outputSpriteSize = 500;
 
 let totalFrames = 288;
 let currentFrame = 0;
@@ -39,8 +40,16 @@ window.onmousemove = function(e) {
 window.onresize = function(e) {
     canvas.width = innerWidth;
     canvas.height = innerHeight;
-    destX = 500 < canvas.width ? ((canvas.width - 500) / 2) : 0;
-    destY = 500 < canvas.height ? ((canvas.height - 500) / 2) + 50 : 0;
+
+    if (canvas.width < 500) {
+        outputSpriteSize = canvas.width - 16;
+    }
+    else {
+        outputSpriteSize = 500;
+    }
+
+    destX = outputSpriteSize < canvas.width ? ((canvas.width - outputSpriteSize) / 2) : 0;
+    destY = outputSpriteSize < canvas.height ? ((canvas.height - outputSpriteSize) / 2) + 50 : 0;
 }
 
 //So the canvas can't be rendered before the image
@@ -52,8 +61,8 @@ snakeSpriteSheet.onload = function() {
 
 let srcX = 0;
 let srcY = 0;
-let destX = 500 < canvas.width ? ((canvas.width - 500) / 2) : 0;
-let destY = 500 < canvas.height ? ((canvas.height - 500) / 2) + 50 : 0;
+let destX = outputSpriteSize < canvas.width ? ((canvas.width - outputSpriteSize) / 2) : 0;
+let destY = outputSpriteSize < canvas.height ? ((canvas.height - outputSpriteSize) / 2) + 50 : 0;
 
 let framesDrawn = 0;
 
@@ -73,7 +82,7 @@ function animate() {
     // set composite mode
     ctx.globalCompositeOperation = "destination-in";
 
-    ctx.drawImage(snakeSpriteSheet, srcX, srcY, spriteWidth, spriteHeight, destX + xOffset, destY + yOffset, 500, 500);
+    ctx.drawImage(snakeSpriteSheet, srcX, srcY, spriteWidth, spriteHeight, destX + xOffset, destY + yOffset, outputSpriteSize, outputSpriteSize);
     ctx.restore();
 
     framesDrawn++;
