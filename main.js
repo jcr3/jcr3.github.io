@@ -9,7 +9,7 @@ canvas.width = innerWidth;
 canvas.height = 500;
 
 const snakeSpriteSheet = new Image();
-snakeSpriteSheet.src = 'sprite-sheet.png';
+snakeSpriteSheet.src = 'images/sprite-sheet.png';
 
 let cols = 288;
 
@@ -36,7 +36,6 @@ window.onmousemove = function(e) {
   if (e.pageY > window.innerHeight/2) {yOffset = disFromCenterY/offsetWeight} else {yOffset = -disFromCenterY/offsetWeight};
   disFromCenter = Math.sqrt(disFromCenterX * disFromCenterX + disFromCenterY * disFromCenterY);
   speed = disFromCenter / 150 + 1;
-  console.log(speed);
 }
 
 //So the canvas can't be rendered before the image
