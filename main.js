@@ -6,16 +6,14 @@ ctx.imageSmoothingEnabled = false;
 
 //Set the width & height of the canvas to match the viewport dimensions
 canvas.width = innerWidth;
-canvas.height = 500;
+canvas.height = innerHeight;
 
 const snakeSpriteSheet = new Image();
-snakeSpriteSheet.src = 'images/sprite-sheet.png';
+snakeSpriteSheet.src = 'images/ascii_8.png';
 
-let cols = 288;
-
-//Work out the size of individual sprites because they are evenly spaced apart
-const spriteWidth = snakeSpriteSheet.width / cols;
-const spriteHeight = spriteWidth;
+let cols = 288,
+    spriteWidth = snakeSpriteSheet.width / cols,
+    spriteHeight = spriteWidth;
 
 let totalFrames = 288;
 let currentFrame = 0;
@@ -38,14 +36,24 @@ window.onmousemove = function(e) {
   speed = disFromCenter / 150 + 1;
 }
 
+window.onresize = function(e) {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+    destX = 500 < canvas.width ? ((canvas.width - 500) / 2) : 0;
+    destY = 500 < canvas.height ? ((canvas.height - 500) / 2) + 50 : 0;
+}
+
 //So the canvas can't be rendered before the image
 snakeSpriteSheet.onload = function() {
+    spriteWidth = snakeSpriteSheet.width / cols;
+    spriteHeight = spriteWidth;
     animate();
 }
 
 let srcX = 0;
 let srcY = 0;
-let destX = canvas.height < canvas.width ? ((canvas.width - canvas.height) / 2) : 0;
+let destX = 500 < canvas.width ? ((canvas.width - 500) / 2) : 0;
+let destY = 500 < canvas.height ? ((canvas.height - 500) / 2) + 50 : 0;
 
 let framesDrawn = 0;
 
@@ -65,7 +73,7 @@ function animate() {
     // set composite mode
     ctx.globalCompositeOperation = "destination-in";
 
-    ctx.drawImage(snakeSpriteSheet, srcX, srcY, spriteWidth, spriteHeight, destX + xOffset, yOffset, canvas.height, canvas.height);
+    ctx.drawImage(snakeSpriteSheet, srcX, srcY, spriteWidth, spriteHeight, destX + xOffset, destY + yOffset, 500, 500);
     ctx.restore();
 
     framesDrawn++;
