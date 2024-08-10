@@ -16,6 +16,13 @@ let cols = 288,
     spriteHeight = spriteWidth,
     outputSpriteSize = 500;
 
+if (canvas.width < 500) {
+    outputSpriteSize = canvas.width - 16;
+}
+else {
+    outputSpriteSize = 500;
+}
+
 let totalFrames = 288;
 let currentFrame = 0;
 
