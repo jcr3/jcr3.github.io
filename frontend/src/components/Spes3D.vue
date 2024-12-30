@@ -2,17 +2,22 @@
     import { onMounted } from 'vue';
     import * as THREE from 'three';
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+	import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+	import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+	import { HalftonePass } from 'three/addons/postprocessing/HalftonePass.js';
+    import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+    import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 
     // 0,0 at center of screen
     var mousePosScreen = new THREE.Vector3();
     var mousePos3D = new THREE.Vector3(-2.5, 3, 1);
 
     const scene = new THREE.Scene();
-    const bgColor = window.getComputedStyle(document.body).getPropertyValue('--bg-color');
-    scene.background = new THREE.Color( bgColor );
+    // const bgColor = window.getComputedStyle(document.body).getPropertyValue('--bg-color');
+    // scene.background = new THREE.Color( bgColor );
     const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
-    const renderer = new THREE.WebGLRenderer();
+    const renderer = new THREE.WebGLRenderer({ alpha: true });
     renderer.setSize( window.innerWidth, window.innerHeight );
 
     const loader = new GLTFLoader();
@@ -28,27 +33,79 @@
     );
     
     // add lighting
-    const light = new THREE.DirectionalLight()
-    const rimLight = new THREE.DirectionalLight();
+    const light = new THREE.DirectionalLight(0xffeedd, 2);
+    const rimLight = new THREE.DirectionalLight(0xffddaa, 0.1);
     light.position.set(-2.5, 3, 1);
     rimLight.position.set(0, 0, -1);
     scene.add( light );
     scene.add( rimLight );
 
+    // post-processing
+    let composer = new EffectComposer( renderer );
+
+	const renderPass = new RenderPass( scene, camera );
+
+	const halftoneParams = {
+		shape: 1,
+		radius: 9,
+		rotateR: Math.PI / 12,
+		rotateB: Math.PI / 12 * 2,
+		rotateG: Math.PI / 12 * 3,
+		scatter: 0.5,
+		blending: 1,
+		blendingMode: 1,
+		greyscale: false,
+		disable: false
+	};
+	const halftonePass = new HalftonePass( window.innerWidth, window.innerHeight, halftoneParams );
+
+    const unrealBloomPass = new UnrealBloomPass( new THREE.Vector2(window.innerWidth, window.innerHeight), 0.9, 1, 0.3);
+
+    const outputPass = new OutputPass();
+    
+	composer.addPass( renderPass );
+    composer.addPass( unrealBloomPass );
+	composer.addPass( halftonePass );
+    composer.addPass( outputPass );
+
+    function screenTo3D(posScreen: THREE.Vector3, pos3D: THREE.Vector3): THREE.Vector3 {
+        // convert screen position to 3D position
+        posScreen.unproject( camera );
+        posScreen.sub( camera.position ).normalize();
+
+        var distance = ( 1 - camera.position.z ) / posScreen.z;
+        
+        pos3D.copy( camera.position ).add( posScreen.multiplyScalar(distance));
+        return pos3D;
+    }
+    
     document.addEventListener('mousemove', (e: MouseEvent) => {
-        // convert screen mouse position to 3d space
+        // desktop event
         mousePosScreen.set(
             ( e.clientX / window.innerWidth ) * 2 - 1,
             - ( e.clientY / window.innerHeight ) * 2 + 1,
             0.5,
         );
-
-        mousePosScreen.unproject( camera );
-        mousePosScreen.sub( camera.position ).normalize();
-
-        var distance = ( 1 - camera.position.z ) / mousePosScreen.z;
-        mousePos3D.copy( camera.position ).add( mousePosScreen.multiplyScalar(distance));
+        mousePos3D = screenTo3D(mousePosScreen, mousePos3D);
     }, false);
+    document.addEventListener('touchmove', (e: TouchEvent) => {
+        // mobile event
+        mousePosScreen.set(
+            ( e.touches[0].clientX / window.innerWidth ) * 2 - 1,
+            - ( e.touches[0].clientY / window.innerHeight ) * 2 + 1,
+            0.5,
+        );
+        mousePos3D = screenTo3D(mousePosScreen, mousePos3D);
+    }, false);
+
+    window.onresize = function () {
+        // dynamically resize
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        composer.setSize( window.innerWidth, window.innerHeight );
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+
+    };
 
     onMounted(() => {
         const container = document.getElementById("logo-container");
@@ -65,10 +122,13 @@
         }
 
         const clock = new THREE.Clock();
+        let delta = 0;
+        let interval = 1/12; // restrict to 12 fps
         clock.start();
 
         function animate() {
             const deltaTime = clock.getDelta();
+            delta += deltaTime;
 
             const meshDerivative = new THREE.Vector2(
                 (mousePos3D.x * rotationFactor - lastFrameData.meshRotation.x) / deltaTime,
@@ -95,17 +155,25 @@
                 mousePos3D.z - dampingFactor * lightDerivative.z,
             );
 
-            console.log(lightPos);
             light.position.set( lightPos.x, lightPos.y, lightPos.z );
 
-            renderer.render( scene, camera );
+            if ( delta > interval ) { // restrict frame rate
+
+                renderer.render( scene, camera );
+                composer.render( deltaTime );
+                halftonePass.uniforms.scatter.value = Math.random() * 0.5 + 0.25;
+
+                delta = delta % interval;
+            }
             
             lastFrameData = {
                 lightPos: lightPos,
                 meshRotation: meshRotation
             };
         }
+        
         renderer.setAnimationLoop( animate );
+            
     });
 </script>
 
@@ -122,5 +190,6 @@
         top: 0;
         width: 100vw;
         height: 100vh;
+        mix-blend-mode: screen;
     }
 </style>

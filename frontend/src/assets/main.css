@@ -2,7 +2,7 @@
 
 :root {
     font-family: 'Courier New', Courier, monospace;
-    --bg-color: #000000;
+    --bg-color: #842806;/*842806*/
     --fg-color: #ffffff;
 
     color: var(--fg-color);
