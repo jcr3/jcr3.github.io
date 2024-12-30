@@ -10,22 +10,32 @@
 
     // 0,0 at center of screen
     var mousePosScreen = new THREE.Vector3();
-    var mousePos3D = new THREE.Vector3(-2.5, 3, 1);
+    var mousePos3D = new THREE.Vector3(0, -1.25, 1);
+
+    let canvasWidth = window.innerWidth;
+    let canvasHeight = window.innerHeight;
 
     const scene = new THREE.Scene();
     // const bgColor = window.getComputedStyle(document.body).getPropertyValue('--bg-color');
     // scene.background = new THREE.Color( bgColor );
-    const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    const camera = new THREE.PerspectiveCamera( 75, canvasWidth / canvasHeight, 0.1, 1000 );
 
     const renderer = new THREE.WebGLRenderer({ alpha: true });
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( canvasWidth, canvasHeight );
 
     const loader = new GLTFLoader();
 
     var spesGeo = new THREE.Group;
 
+    function resizeMascot(width: number) {
+        if (canvasWidth < 800) return window.innerWidth / 800;
+        else return 1;
+    }
+
     loader.load( '/spes3d.glb', function ( gltf ) {
         spesGeo = gltf.scene;
+        const scaleFactor = resizeMascot(window.innerWidth);
+        spesGeo.scale.set(scaleFactor, scaleFactor, scaleFactor);
 	    scene.add( spesGeo );
         }, undefined, function ( error ) {
             console.error( error );
@@ -35,7 +45,7 @@
     // add lighting
     const light = new THREE.DirectionalLight(0xffeedd, 2);
     const rimLight = new THREE.DirectionalLight(0xffddaa, 0.1);
-    light.position.set(-2.5, 3, 1);
+    light.position.set(0, 0, 1);
     rimLight.position.set(0, 0, -1);
     scene.add( light );
     scene.add( rimLight );
@@ -57,9 +67,9 @@
 		greyscale: false,
 		disable: false
 	};
-	const halftonePass = new HalftonePass( window.innerWidth, window.innerHeight, halftoneParams );
+	const halftonePass = new HalftonePass( canvasWidth, canvasHeight, halftoneParams );
 
-    const unrealBloomPass = new UnrealBloomPass( new THREE.Vector2(window.innerWidth, window.innerHeight), 0.9, 1, 0.3);
+    const unrealBloomPass = new UnrealBloomPass( new THREE.Vector2(canvasWidth, canvasHeight), 0.9, 1, 0.3);
 
     const outputPass = new OutputPass();
     
@@ -82,8 +92,8 @@
     document.addEventListener('mousemove', (e: MouseEvent) => {
         // desktop event
         mousePosScreen.set(
-            ( e.clientX / window.innerWidth ) * 2 - 1,
-            - ( e.clientY / window.innerHeight ) * 2 + 1,
+            ( e.clientX / canvasWidth ) * 2 - 1,
+            - ( e.clientY / canvasHeight ) * 2 + 1,
             0.5,
         );
         mousePos3D = screenTo3D(mousePosScreen, mousePos3D);
@@ -91,8 +101,8 @@
     document.addEventListener('touchmove', (e: TouchEvent) => {
         // mobile event
         mousePosScreen.set(
-            ( e.touches[0].clientX / window.innerWidth ) * 2 - 1,
-            - ( e.touches[0].clientY / window.innerHeight ) * 2 + 1,
+            ( e.touches[0].clientX / canvasWidth ) * 2 - 1,
+            - ( e.touches[0].clientY / canvasHeight ) * 2 + 1,
             0.5,
         );
         mousePos3D = screenTo3D(mousePosScreen, mousePos3D);
@@ -100,9 +110,13 @@
 
     window.onresize = function () {
         // dynamically resize
-        renderer.setSize( window.innerWidth, window.innerHeight );
-        composer.setSize( window.innerWidth, window.innerHeight );
-        camera.aspect = window.innerWidth / window.innerHeight;
+        canvasWidth = window.innerWidth;
+        canvasHeight = window.innerHeight;
+        const scaleFactor = resizeMascot(window.innerWidth);
+        spesGeo.scale.set(scaleFactor, scaleFactor, scaleFactor);
+        renderer.setSize( canvasWidth, canvasHeight );
+        composer.setSize( canvasWidth, canvasHeight );
+        camera.aspect = canvasWidth / canvasHeight;
         camera.updateProjectionMatrix();
 
     };
@@ -189,7 +203,6 @@
         left: 0;
         top: 0;
         width: 100vw;
-        height: 100vh;
         mix-blend-mode: screen;
     }
 </style>

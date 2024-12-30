@@ -21,14 +21,26 @@ import { onUnmounted } from 'vue';
             
         setInterval(() => {
             if (role) role.textContent = roleList[Math.floor(Math.random()*roleList.length)];
-        }, 150);
+        }, 1/6 * 1000);
     });
     
 </script>
 
 <template>
-    <div style="min-height: 100vh; color: var(--fg-color); background-color: var(--bg-color);">
-        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
+    <div style="color: var(--fg-color); background-color: var(--bg-color);">
+
+        <div style="width: 100%; display: flex; justify-content: end;">
+            <object
+                class="logo"
+                type="image/svg+xml"
+                data="spes_logo.svg"
+                width="64"
+            >
+            </object>
+        </div>
+        
+
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 30vh;">
             <h1 class="overlay">Hello, my name is JC and I am a</h1>
             <h1 id="role" class="overlay" style="font-style: italic; text-align: right;">Designer</h1>
         </div>
@@ -50,5 +62,9 @@ import { onUnmounted } from 'vue';
         padding: 0.25em;
         width: calc(100% - 2 * 0.25em);
         -webkit-text-stroke: var(--bg-color) 0.0025em;
+    }
+
+    .logo:hover {
+        transform: rotate(30deg);
     }
 </style>
