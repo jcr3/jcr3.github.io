@@ -24,7 +24,7 @@
 
     var spesGeo = new THREE.Group;
 
-    loader.load( '@/../public/spes3d.glb', function ( gltf ) {
+    loader.load( '/spes3d.glb', function ( gltf ) {
         spesGeo = gltf.scene;
 	    scene.add( spesGeo );
         }, undefined, function ( error ) {
