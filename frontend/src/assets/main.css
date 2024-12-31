@@ -9,6 +9,11 @@
     background-color: var(--bg-color);
 }
 
-h1 {
-    font-size: 2em;
+.icon {
+    filter: opacity(0.7);
+    transition: 0.3s;
+}
+
+.icon:hover {
+    filter: opacity(1);
 }

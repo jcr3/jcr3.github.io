@@ -1,7 +1,8 @@
 <script setup lang="ts">
+    import { ref, onMounted, onUnmounted } from 'vue';
+    import { Icon } from '@iconify/vue';
+
     import Spes3D from '@/components/Spes3D.vue';
-import { onUnmounted } from 'vue';
-    import { onMounted } from 'vue';
 
     const roleList = [
         'Designer',
@@ -16,11 +17,13 @@ import { onUnmounted } from 'vue';
         'Hobbiest'
     ]
 
+    const pauseRole = ref(false);
+
     onMounted(() => {
         let role = document.getElementById("role");
             
         setInterval(() => {
-            if (role) role.textContent = roleList[Math.floor(Math.random()*roleList.length)];
+            if (role && !pauseRole.value) role.textContent = roleList[Math.floor(Math.random()*roleList.length)];
         }, 1/6 * 1000);
     });
     
@@ -29,20 +32,40 @@ import { onUnmounted } from 'vue';
 <template>
     <div style="color: var(--fg-color); background-color: var(--bg-color);">
 
-        <div style="width: 100%; display: flex; justify-content: end;">
-            <object
-                class="logo"
-                type="image/svg+xml"
-                data="spes_logo.svg"
-                width="64"
-            >
-            </object>
+        <div style="width: calc(100% - 2em); display: flex; justify-content: end; padding: 1em;">
+            <div style="display: flex; flex: 1 1 auto; justify-content: center;">
+                <object
+                    class="logo"
+                    type="image/svg+xml"
+                    data="spes_logo.svg"
+                    width="64"
+                    style="transform: translateY(-1em);"
+                >
+                </object>
+            </div>
+
+            <Icon
+                icon="streamline:interface-setting-menu-1-button-parallel-horizontal-lines-menu-navigation-three-hamburger"
+                width="32"
+                class="icon"
+                style="flex: 0 1 auto; display: flex; cursor: pointer; transform: rotate(45deg);"
+            />
         </div>
         
 
         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 30vh;">
-            <h1 class="overlay">Hello, my name is JC and I am a</h1>
-            <h1 id="role" class="overlay" style="font-style: italic; text-align: right;">Designer</h1>
+            <p class="overlay">
+                Hello, my name is JC and I am a
+            </p>
+            <p
+                id="role"
+                class="overlay"
+                style="font-style: italic; text-align: right;"
+                @mouseover="() => {pauseRole = true}"
+                @mouseout="() => {pauseRole = false}"
+            >
+                Designer
+            </p>
         </div>
     
         <Spes3D />
@@ -53,8 +76,6 @@ import { onUnmounted } from 'vue';
 
 <style scoped>
     .overlay {
-        pointer-events: none;
-        z-index: 1;
         font-family: monospace;
         font-weight: bold;
         font-size: 3em;
@@ -64,6 +85,9 @@ import { onUnmounted } from 'vue';
         -webkit-text-stroke: var(--bg-color) 0.0025em;
     }
 
+    .logo {
+        transition: 0.5s;
+    }
     .logo:hover {
         transform: rotate(30deg);
     }
