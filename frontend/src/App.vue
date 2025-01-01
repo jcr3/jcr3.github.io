@@ -201,7 +201,7 @@
 
     #noise-texture:after{
         animation: grain 1s steps(2) infinite;
-        background-image: url("noise_texture.jpg");
+        background-image: url("/noise_texture.jpg");
         position: fixed;
         content: "";
         width: 200%;
