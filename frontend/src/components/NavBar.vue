@@ -5,6 +5,7 @@
 
     function scrollToASection(id: string) {
         document.getElementById(id)?.scrollIntoView({behavior: 'smooth'});
+        emit('close');
     }
 </script>
 
@@ -15,11 +16,29 @@
             <div style="display: flex; flex: 1 1 auto; flex-direction: column; gap: 2em; padding: 1em;">
                 <p class="link"
                     @click="() => scrollToASection('about')"
-                >About</p>
-                <p class="link">Some</p>
-                <p class="link">Fake</p>
-                <p class="link">Links</p>
-                <p class="link">Resume</p>
+                >
+                    About
+                </p>
+                <p class="link"
+                    @click="() => emit('close')"
+                >
+                    Some
+                </p>
+                <p class="link"
+                    @click="() => emit('close')"
+                >
+                    Fake
+                </p>
+                <p class="link"
+                    @click="() => emit('close')"
+                >
+                    Links
+                </p>
+                <p class="link"
+                    @click="() => emit('close')"
+                >
+                    Resume
+                </p>
             </div>
             <Icon
                 icon="material-symbols:close"
