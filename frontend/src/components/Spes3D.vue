@@ -7,8 +7,6 @@
 	import { HalftonePass } from 'three/addons/postprocessing/HalftonePass.js';
     import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
     import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
-import { constrainedMemory } from 'process';
-import { contain } from 'three/src/extras/TextureUtils.js';
 
 
     // VARIABLES 
@@ -21,7 +19,7 @@ import { contain } from 'three/src/extras/TextureUtils.js';
 
     const halftoneParams = {
 		shape: 1,
-		radius: 9,
+		radius: 9 * Math.min(canvasWidth, canvasHeight) / 1200,
 		rotateR: Math.PI / 12,
 		rotateB: Math.PI / 12 * 2,
 		rotateG: Math.PI / 12 * 3,
@@ -113,7 +111,7 @@ import { contain } from 'three/src/extras/TextureUtils.js';
 
     
     function resizeMascot(width: number) {
-        if (canvasWidth < 800) return width / 400;
+        if (canvasWidth < 500) return width / 500;
         else return 1;
     }
 
@@ -153,13 +151,16 @@ import { contain } from 'three/src/extras/TextureUtils.js';
         // dynamically resize
         canvasWidth = window.innerWidth;
         canvasHeight = window.innerHeight;
+
         const scaleFactor = resizeMascot(window.innerWidth);
         spesGeo.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
+		halftonePass.uniforms.radius.value = 9 * Math.min(canvasWidth, canvasHeight) / 1200;
+
         renderer.setSize( canvasWidth, canvasHeight );
         composer.setSize( canvasWidth, canvasHeight );
         camera.aspect = canvasWidth / canvasHeight;
         camera.updateProjectionMatrix();
-
     };
 
 
@@ -170,6 +171,11 @@ import { contain } from 'three/src/extras/TextureUtils.js';
         // can only do this once the div exists
         const container = document.getElementById("logo-container");
         if (container) container.appendChild( renderer.domElement );
+
+        THREE.DefaultLoadingManager.onLoad = function ( ) {
+            // fade in the canvas once loaded
+            if (container) container.style.filter = "opacity(100)";
+        };
 
         if ( !(matchMedia('(pointer:fine)').matches) ) {
             // doesn't have a mouse so animate manually
@@ -243,7 +249,12 @@ import { contain } from 'three/src/extras/TextureUtils.js';
         left: 0;
         top: 0;
         width: 100vw;
+
         mix-blend-mode: screen;
+
         pointer-events: none;
+
+        transition: 3s;
+        filter: opacity(0); /* bring to 100 once loaded */
     }
 </style>

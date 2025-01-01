@@ -10,10 +10,27 @@
 }
 
 .icon {
-    filter: opacity(0.7);
+    cursor: pointer;
+    filter: opacity(0.7) blur(0.05em);
     transition: 0.3s;
 }
-
 .icon:hover {
-    filter: opacity(1);
+    filter: opacity(1) blur(0.025em);
+}
+
+/* animations */
+
+.slide-in-from-left-enter-active {
+    animation: slide-in 0.5s;
+}
+.slide-in-from-left-leave-active {
+    animation: slide-in 0.5s reverse;
+}
+@keyframes slide-in {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
