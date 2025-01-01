@@ -2,8 +2,10 @@
 
 :root {
     font-family: 'Courier New', Courier, monospace;
-    --bg-color: #842806;/*842806*/
+    /* colors for landing page, will change as you scroll */
+    --bg-color: #842806;
     --fg-color: #ffffff;
+    --accent-color: #f5be09;
 
     color: var(--fg-color);
     background-color: var(--bg-color);
@@ -11,11 +13,27 @@
 
 .icon {
     cursor: pointer;
-    filter: opacity(0.7) blur(0.05em);
+    filter: blur(0.05em);
     transition: 0.3s;
 }
 .icon:hover {
-    filter: opacity(1) blur(0.025em);
+    color: var(--accent-color);
+    filter: blur(0.025em);
+}
+
+.link {
+  font-size: 2em;
+  font-weight: bolder;
+  letter-spacing: -0.05em;
+  word-spacing: -0.2em;
+  cursor: pointer;
+  transition: color 0.3s;
+  
+  filter: blur(0.025em) opacity(0.9);
+}
+.link:hover {
+  color: var(--accent-color);
+  filter: blur(0.015em) opacity(1);
 }
 
 /* animations */
@@ -33,4 +51,19 @@
   100% {
     transform: translateX(0);
   }
+}
+
+.fade-enter-active {
+  animation: fade 0.5s;
+}
+.fade-leave-active {
+  animation: fade 0.5s reverse;
+}
+@keyframes fade {
+0% {
+  filter: opacity(0) blur(1);
+}
+100% {
+  filter: opacity(1) blur(0.1);
+}
 }

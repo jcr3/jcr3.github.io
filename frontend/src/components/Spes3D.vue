@@ -1,5 +1,8 @@
 <script setup lang="ts">
     import { onMounted } from 'vue';
+    
+    import { makeNoise2D } from 'fast-simplex-noise';
+
     import * as THREE from 'three';
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 	import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
@@ -30,8 +33,11 @@
 		disable: false
 	};
 
-    const dampingFactor = 0.008;
+    let dampingFactor = 0.008;
     const rotationFactor = 0.1;
+    const autoMoveSpeed = 2;
+    
+    const maxMascotRotation = 0.5;
 
     let delta = 0;
     let interval = 1/12; // restrict to 12 fps
@@ -59,8 +65,7 @@
 
     loader.load( '/spes3d.glb', function ( gltf ) {
         spesGeo = gltf.scene;
-        const scaleFactor = resizeMascot(window.innerWidth);
-        spesGeo.scale.set(scaleFactor, scaleFactor, scaleFactor);
+        resizeMascot(window.innerWidth);
 	    scene.add( spesGeo );
         }, undefined, function ( error ) {
             console.error( error );
@@ -111,13 +116,12 @@
 
     
     function resizeMascot(width: number) {
-        if (canvasWidth < 500) return width / 500;
-        else return 1;
+        if (canvasWidth < 500) spesGeo.scale.set(width / 500, width / 500, width / 500);
+        else spesGeo.scale.set(1, 1, 1);
     }
 
-    function changeMascotPosition() {
-        // randomly click a spot on the screen to show off the 3d on touch screen devices
-        // i.e. when the mouse effects don't show up
+    function autoMoveMascot(t: number, positionNoise: (x: number, y: number) => number) {
+        // use simplex noise to move mascot and show off 3d on touch devices
 
         let horizontalScale = 1;
         let verticalScale = 1;
@@ -126,8 +130,8 @@
         if (canvasHeight < 800) verticalScale = 2;
 
         mousePosScreen.set(
-            horizontalScale * ( Math.random() * 2 - 1 ),
-            verticalScale * ( Math.random() * 2 - 1 ),
+            horizontalScale * positionNoise(t * autoMoveSpeed, 0),
+            verticalScale * positionNoise(0, t * autoMoveSpeed),
             0.5,
         );
 
@@ -135,33 +139,29 @@
     }
     
 
-    // EVENT LISTENERS
+    // INPUT
 
-    document.addEventListener('mousemove', (e: MouseEvent) => {
-        // desktop event
-        mousePosScreen.set(
-            ( e.clientX / canvasWidth ) * 2 - 1,
-            - ( e.clientY / canvasHeight ) * 2 + 1,
-            0.5,
-        );
-        mousePos3D = screenTo3D(mousePosScreen, mousePos3D);
-    }, false);
-
-    window.onresize = function () {
-        // dynamically resize
-        canvasWidth = window.innerWidth;
-        canvasHeight = window.innerHeight;
-
-        const scaleFactor = resizeMascot(window.innerWidth);
-        spesGeo.scale.set(scaleFactor, scaleFactor, scaleFactor);
-
-		halftonePass.uniforms.radius.value = 9 * Math.min(canvasWidth, canvasHeight) / 1200;
-
-        renderer.setSize( canvasWidth, canvasHeight );
-        composer.setSize( canvasWidth, canvasHeight );
-        camera.aspect = canvasWidth / canvasHeight;
-        camera.updateProjectionMatrix();
-    };
+    if ( matchMedia('(pointer:fine)').matches ) {
+        // has a mouse
+        document.addEventListener('mousemove', (e: MouseEvent) => {
+            mousePosScreen.set(
+                ( e.clientX / canvasWidth ) * 2 - 1,
+                - ( e.clientY / canvasHeight ) * 2 + 1,
+                0.5,
+            );
+            mousePos3D = screenTo3D(mousePosScreen, mousePos3D);
+        }, false);
+    }
+    else {
+        // touch screen
+        dampingFactor = 0;
+        let t = 0;
+        const positionNoise = makeNoise2D();
+        setInterval(() => {
+            autoMoveMascot(t, positionNoise);
+            t += 12/1000;
+        }, 1000/12);
+    }
 
 
     // LOGIC
@@ -169,18 +169,32 @@
     onMounted(() => {
 
         // can only do this once the div exists
-        const container = document.getElementById("logo-container");
-        if (container) container.appendChild( renderer.domElement );
+        const container = document.getElementById("mascot-container");
+        if (container == null) { console.log("No mascot-container"); return; }
+
+        container.appendChild( renderer.domElement );
 
         THREE.DefaultLoadingManager.onLoad = function ( ) {
             // fade in the canvas once loaded
-            if (container) container.style.filter = "opacity(100)";
+            container.style.filter = "opacity(100)";
         };
+        
+        window.addEventListener('resize', () => {
+            // dynamically resize
+            
+            canvasWidth = container.getBoundingClientRect().width;
+            canvasHeight = container.getBoundingClientRect().height;
 
-        if ( !(matchMedia('(pointer:fine)').matches) ) {
-            // doesn't have a mouse so animate manually
-            setInterval(changeMascotPosition, 1000);
-        }
+            resizeMascot(window.innerWidth);
+
+            halftonePass.uniforms.radius.value = 9 * Math.min(canvasWidth, canvasHeight) / 1200;
+            unrealBloomPass.resolution.set(canvasWidth, canvasHeight);
+
+            renderer.setSize( canvasWidth, canvasHeight );
+            composer.setSize( canvasWidth, canvasHeight );
+            camera.aspect = canvasWidth / canvasHeight;
+            camera.updateProjectionMatrix();
+        });
 
         clock.start();
 
@@ -198,6 +212,13 @@
                 mousePos3D.y * rotationFactor - dampingFactor * meshDerivative.y
             );
 
+            // cap rotation to prevent glitches
+            if (meshRotation.x > maxMascotRotation) meshRotation.x = maxMascotRotation;
+            if (meshRotation.x < -maxMascotRotation) meshRotation.x = -maxMascotRotation;
+            if (meshRotation.y > maxMascotRotation) meshRotation.y = maxMascotRotation;
+            if (meshRotation.y < -maxMascotRotation) meshRotation.y = -maxMascotRotation;
+
+            // not exactly sure why but flipping like this makes it rotate towards the mouse
             spesGeo.rotation.z -= deltaTime * 1;
             spesGeo.rotation.x = meshRotation.y;
             spesGeo.rotation.y = - meshRotation.x;
@@ -238,23 +259,24 @@
 </script>
 
 <template>
-    <div id="logo-container">
+    <div id="mascot-container">
         <!-- three canvas rendered here -->
     </div>
 </template>
 
 <style scoped>
-    #logo-container {
+    #mascot-container {
         position: absolute;
         left: 0;
         top: 0;
         width: 100vw;
+        height: 100%;
 
         mix-blend-mode: screen;
 
         pointer-events: none;
 
-        transition: 3s;
+        transition: color background-color 3s;
         filter: opacity(0); /* bring to 100 once loaded */
     }
 </style>
