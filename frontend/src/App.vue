@@ -21,8 +21,18 @@
         'Homelabber'
     ]
 
+    // parallax layers
+    let farBackground = 1/8;
+    let background = 1/4;
+    let midground = 1/2;
+    let foreground = 5/4;
+
     const pauseRole = ref(false);
+
     const showNavBar = ref(false);
+    const showMetaBalls = ref(false);
+
+    const slideDuration = ref(500);
 
     function wiggleLogo() {
         // can't use ':hover' so doing it manually
@@ -40,22 +50,46 @@
 
     onMounted(() => {
         let role = document.getElementById("role");
+
         const landingPage = document.getElementById('landing-page');
+
         const noiseContainer = document.getElementById('noise-container');
+        const metaballContainer = document.getElementById('metaball-container');
+
+        const mascotContainer = document.getElementById('mascot-container');
+        const arrowIcon = document.getElementById('arrow-icon');
+        const aboutheader = document.getElementById('about-header');
+        const aboutText = document.getElementById('about-text');
 
         window.onscroll = () => {
-            if (landingPage && window.scrollY > landingPage.getBoundingClientRect().height/2) {
-                if (noiseContainer) noiseContainer.style.opacity = "1";
-                document.documentElement.style.setProperty('--fg-color', '#ffffff');
-                document.documentElement.style.setProperty('--bg-color', '#020202');
-                document.documentElement.style.setProperty('--accent-color', '#ff00ff');
-            }
-            else {
+            if (landingPage && window.scrollY < landingPage.getBoundingClientRect().height/2) {
                 if (noiseContainer) noiseContainer.style.opacity = "0";
+                if (metaballContainer) metaballContainer.style.opacity = "0";
+                showMetaBalls.value = false;
                 document.documentElement.style.setProperty('--fg-color', '#ffffff');
                 document.documentElement.style.setProperty('--bg-color', '#842806');
                 document.documentElement.style.setProperty('--accent-color', '#f5be09');
             }
+            else {
+                if (noiseContainer) noiseContainer.style.opacity = "1";
+                if (metaballContainer) metaballContainer.style.opacity = "1";
+                showMetaBalls.value = true;
+                document.documentElement.style.setProperty('--fg-color', '#ffffff');
+                document.documentElement.style.setProperty('--bg-color', '#020202');
+                document.documentElement.style.setProperty('--accent-color', '#ff00ff');
+            }
+
+            // Parallax effects
+            farBackground = - window.scrollY * 5/4;
+            background = - window.scrollY * 1/2;
+            midground = - window.scrollY * 1/4;
+            foreground = - window.scrollY * 1/8;
+
+            if (metaballContainer) metaballContainer.style.transform = `translateY(${background}px)`;
+            if (mascotContainer) mascotContainer.style.transform = `translateY(${background}px)`;
+            if (arrowIcon) arrowIcon.style.transform = `translateY(${midground}px)`;
+            if (aboutheader) aboutheader.style.transform = `translateY(${midground}px)`;
+            if (aboutText) aboutText.style.transform = `translateY(${foreground}px)`;
         }
             
         setInterval(() => {
@@ -90,6 +124,11 @@
             <div id="noise-texture"></div>
         </div>
 
+        <div id="metaball-container">
+            <MetaBalls v-motion-fade-visible :duration="slideDuration*2"/>
+        </div>
+        
+        
 
         <!-- LANDING PAGE -->
 
@@ -123,13 +162,17 @@
                 </p>
             </div>
 
-            <Icon
-                icon="material-symbols:line-end-arrow-notch"
+            <Icon v-motion-slide-visible-once-bottom
+                :duration="slideDuration"
+                icon="material-symbols:arrow-circle-down"
+                id="arrow-icon"
                 class="overlay"
-                style="transform: rotate(90deg); width: 1em; position: absolute; bottom: 1em; right: 20%;"
+                style="width: 1em; position: absolute; bottom: 1.5em; right: 20%;"
             />
-        
-            <Spes3D />
+            
+            <div id="mascot-container">
+                <Spes3D />
+            </div>
         </div>
 
 
@@ -137,17 +180,24 @@
 
         <div class="section" id="about" style="height: 100vh;">
             <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 3em;">
-                <p class="overlay">
+                <p v-motion-slide-visible-once-bottom
+                    :duration="slideDuration"
+                    class="overlay"
+                    id="about-header"
+                >
                     About
                 </p>
-                <p class="overlay" style="padding-top: 3em; text-align: right; font-size: 2em;">
+                <p v-motion-slide-visible-once-bottom
+                    :duration="slideDuration"
+                    class="overlay"
+                    id="about-text"
+                    style="padding-top: 3em; text-align: right; font-size: 2em;"
+                >
                     Some example text about me would go here, but for now I'm leaving it like this.
-                    <br>
+                    <br><br>
                     I'll even put this second filler paragraph for now.
                 </p>
             </div>
-            
-            <MetaBalls v-motion-fade-visible :duration="2000"/>
         </div>
     </div>
 
@@ -163,6 +213,14 @@
         
         position: relative;
         transition: all 3s;
+    }
+
+    #mascot-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        mix-blend-mode: screen;
     }
 
     .section {
@@ -199,7 +257,7 @@
         transition: opacity 3s;
     }
 
-    #noise-texture:after{
+    #noise-texture:after {
         animation: grain 1s steps(2) infinite;
         background-image: url("/noise_texture.jpg");
         position: fixed;
@@ -209,6 +267,15 @@
         top: -50%;
         left: -50%;
         opacity: 0.2;
+    }
+
+    #metaball-container {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 50%;
+        opacity: 0;
+        transition: opacity 1.5s;
     }
 
     #logo {
