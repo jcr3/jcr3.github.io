@@ -5,6 +5,7 @@
     import NavBar from '@/components/NavBar.vue';
     import Spes3D from '@/components/Spes3D.vue';
     import MetaBalls from '@/components/MetaBalls.vue';
+import { start } from 'repl';
 
     const roleList = [
         'Designer',
@@ -48,6 +49,23 @@
         logo.style.transform = "rotate(0deg) translateY(-1em)";
     }
 
+    function clampedParallaxFromScroll(startY: number, endY: number, startPos: Array<number>, endPos: Array<number>): Array<number> {
+        // move an element between start and end scrollY position
+        if (window.scrollY < startY) {
+            return startPos;
+        }
+        else if (window.scrollY < endY) {
+            const x = (window.scrollY - startY) / (endY - startY) * (endPos[0] - startPos[0]) + startPos[0];
+            const y = (window.scrollY - startY) / (endY - startY) * (endPos[1] - startPos[1]);
+            console.log(x, y)
+            return [x, y];
+        }
+        else {
+            return endPos;
+        }
+
+    }
+
     onMounted(() => {
         let role = document.getElementById("role");
 
@@ -58,7 +76,7 @@
 
         const mascotContainer = document.getElementById('mascot-container');
         const arrowIcon = document.getElementById('arrow-icon');
-        const aboutheader = document.getElementById('about-header');
+        const aboutHeader = document.getElementById('about-header');
         const aboutText = document.getElementById('about-text');
 
         window.onscroll = () => {
@@ -85,11 +103,32 @@
             midground = - window.scrollY * 1/4;
             foreground = - window.scrollY * 1/8;
 
+            // vertical
             if (metaballContainer) metaballContainer.style.transform = `translateY(${background}px)`;
             if (mascotContainer) mascotContainer.style.transform = `translateY(${background}px)`;
             if (arrowIcon) arrowIcon.style.transform = `translateY(${midground}px)`;
-            if (aboutheader) aboutheader.style.transform = `translateY(${midground}px)`;
-            if (aboutText) aboutText.style.transform = `translateY(${foreground}px)`;
+
+            // horizontal
+
+            if (aboutHeader) {
+                const aboutHeaderRect = aboutHeader.getBoundingClientRect();
+                aboutHeader.style.transform =`translateX(${clampedParallaxFromScroll(
+                    aboutHeaderRect.top,
+                    aboutHeaderRect.top + window.innerHeight/2,
+                    [-aboutHeaderRect.width -16, 0],
+                    [0, 0]
+                )[0]}px)`;
+            }
+            
+            if (aboutText) {
+                const aboutTextRect = aboutText.getBoundingClientRect();
+                aboutText.style.transform =`translateX(${clampedParallaxFromScroll(
+                    aboutTextRect.top, // when first shown
+                    aboutTextRect.top + window.innerHeight/2,
+                    [aboutTextRect.width, 0],
+                    [0, 0]
+                )[0]}px)`;
+            }
         }
             
         setInterval(() => {
@@ -178,25 +217,22 @@
 
         <!-- ABOUT SECTION -->
 
-        <div class="section" id="about" style="height: 100vh;">
-            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 3em;">
-                <p v-motion-slide-visible-once-bottom
-                    :duration="slideDuration"
-                    class="overlay"
-                    id="about-header"
-                >
-                    About
-                </p>
-                <p v-motion-slide-visible-once-bottom
-                    :duration="slideDuration"
-                    class="overlay"
-                    id="about-text"
-                    style="padding-top: 3em; text-align: right; font-size: 2em;"
-                >
-                    Some example text about me would go here, but for now I'm leaving it like this.
-                    <br><br>
-                    I'll even put this second filler paragraph for now.
-                </p>
+        <div class="section" id="about" style="height: 100vh; width: 100%;">
+            <div class="overlay" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 3em;">
+                <div style="width: 100%; display: flex; justify-content: start;">
+                    <p id="about-header">
+                        About
+                    </p>
+                </div>
+                
+                <div style="width: 100%; display: flex; justify-content: end;">
+                    <p id="about-text" style="padding-top: 3em; text-align: right; font-size: 0.75em; max-width: 20em;">
+                        Some example text about me would go here, but for now I'm leaving it like this.
+                        <br><br>
+                        I'll even put this second filler paragraph for now.
+                    </p>
+                </div>
+                
             </div>
         </div>
     </div>

@@ -13,14 +13,14 @@
         z: number
     }
     
-    
-    const accentColor = hexToRGB("#ff00ff");//hexToRGB(getComputedStyle(document.documentElement).getPropertyValue('--accent-color'));
-    const colorSpread = 100;
+    let accentColor = hexToRGB("#ff00ff");//hexToRGB(getComputedStyle(document.documentElement).getPropertyValue('--accent-color'));
+    const colorSpread = 255;
     const positionSpread = 1;
     const trailSpread = 1;
 
     const sizeFactor = 1.5;
     const speedFactor = 0.7;
+    const colorBlendFactor = 0.1; // lower is slower
 
     const positionNoise = makeNoise3D();
 
@@ -76,8 +76,17 @@
     }
     
     onMounted(() => {
+
         const canvas = <HTMLCanvasElement> document.getElementById("metaballs-canvas");
         if (canvas == null) { console.log("No metaballs-canvas"); return; }
+
+        window.addEventListener('resize', () => {
+            // dynamically resize
+            canvas.width = canvas.getBoundingClientRect().width;
+            canvas.height = canvas.getBoundingClientRect().height;
+            
+            baseRadius = Math.max(800, canvas.width);
+        });
         
         // get simensions of canvas from css size of element
         canvas.width = canvas.getBoundingClientRect().width;
@@ -90,14 +99,15 @@
         var gradients: Array<Gradient> = [];
         
         gradients = addGradient(baseRadius, [0.25, 0.125, 0.125, 0.0625, 0.0625, 0.0625, 0.05, 0.05, 0.05, 0.05, 0.05], gradients);
-
-        window.addEventListener('resize', () => {
-            // dynamically resize
-            canvas.width = canvas.getBoundingClientRect().width;
-            canvas.height = canvas.getBoundingClientRect().height;
-            
-            baseRadius = Math.max(800, canvas.width);
-        });
+        
+        let x0: number;
+        let y0: number;
+        let offset: Vector3;
+        let color = hexToRGB(getComputedStyle(document.documentElement).getPropertyValue('--accent-color'));
+        let scaleOffset: number;
+    
+        // include after image trail
+        const scales = [1, 0.9, 0.7];//, 0.6, 0.5, 0.3];
 
         function animate(t: number) {
             
@@ -105,16 +115,9 @@
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+            accentColor = hexToRGB(getComputedStyle(document.documentElement).getPropertyValue('--accent-color'));
+
             gradients.forEach((gradient) => {
-
-                // include after image trail
-                const scales = [1, 0.9, 0.7];//, 0.6, 0.5, 0.3];
-
-                let x0: number;
-                let y0: number;
-                let offset: Vector3;
-                let color: Array<number>;
-                let scaleOffset: number;
                 
                 scales.forEach((scale) => {
 
@@ -123,15 +126,17 @@
                     offset = getOffset(t/speed + gradient.noiseOffset - trailSpread * (1 - scale/4));
 
                     scaleOffset = sizeFactor * 0.5 * ( offset.z + 1.1 );
+                    if (scaleOffset < 0.5) scaleOffset = 0.5;
 
                     x0 = canvas.width/2 - gradient.radius/2 + offset.x * baseRadius/8;
                     y0 = canvas.height/2 - gradient.radius/2 + offset.y * baseRadius/8;
                     
                     if (scale==scales[0])
                     color = [
-                        Math.min(Math.max(accentColor[0] + offset.x * colorSpread, 0), 255),
-                        Math.min(Math.max(accentColor[1] + offset.y * colorSpread, 0), 255),
-                        Math.min(Math.max(accentColor[2] + offset.z * colorSpread, 0), 255),
+                        // blend with previous color a bit
+                        colorBlendFactor * Math.min(Math.max(accentColor[0] + offset.x * colorSpread, 0), 255) + (1 - colorBlendFactor) * color[0],
+                        colorBlendFactor * Math.min(Math.max(accentColor[1] + offset.y * colorSpread, 0), 255) + (1 - colorBlendFactor) * color[1],
+                        colorBlendFactor * Math.min(Math.max(accentColor[2] + offset.z * colorSpread, 0), 255) + (1 - colorBlendFactor) * color[2],
                     ];
 
                     drawGradient(
