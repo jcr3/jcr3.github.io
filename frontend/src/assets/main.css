@@ -7,12 +7,15 @@
     --fg-color: #ffffff;
     --accent-color: #f5be09;
 
+    --transition-time: 1.5s;
+
     color: var(--fg-color);
-    background-color: var(--bg-color);
+    background: var(--bg-color);
 }
 
 .icon {
     cursor: pointer;
+    color: var(--fg-color);
     filter: blur(0.05em);
     transition: 0.3s;
 }
@@ -23,6 +26,7 @@
 
 .link {
   font-size: 2em;
+  color: var(--fg-color);
   font-weight: bolder;
   letter-spacing: -0.05em;
   word-spacing: -0.2em;

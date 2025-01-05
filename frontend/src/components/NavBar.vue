@@ -11,34 +11,34 @@
 
 <template>
     <div class="container">
-        <div style="display: flex; height: 100%; background-color: var(--bg-color); transition: all 3s;">
+        <div style="display: flex; height: 100%; background: var(--bg-color); transition: all var(--transition-time);">
             <div class="border"></div>
             <div style="display: flex; flex: 1 1 auto; flex-direction: column; gap: 2em; padding: 1em;">
-                <p class="link"
-                    @click="() => scrollToASection('about')"
-                >
+                <p class="link" @click="() => scrollToASection('about')">
                     About
                 </p>
-                <p class="link"
-                    @click="() => emit('close')"
-                >
+                <p class="link" @click="() => scrollToASection('projects')">
+                    Projects
+                </p>
+                <p class="link" @click="() => scrollToASection('contact')">
+                    Contact
+                </p>
+                <!-- <p class="link" @click="() => emit('close')">
                     Some
                 </p>
-                <p class="link"
-                    @click="() => emit('close')"
-                >
+                <p class="link" @click="() => emit('close')">
                     Fake
                 </p>
-                <p class="link"
-                    @click="() => emit('close')"
-                >
+                <p class="link" @click="() => emit('close')">
                     Links
-                </p>
-                <p class="link"
+                </p> -->
+                <a class="link"
+                    target="_blank" rel="noopener noreferrer" href="https://github.com/jcr3/"
+                    style="text-decoration: none;"
                     @click="() => emit('close')"
                 >
                     Resume
-                </p>
+                </a>
             </div>
             <Icon
                 icon="material-symbols:close"
@@ -57,10 +57,10 @@
         position: fixed;
         width: 15vw;
         height: 100vh;
-        min-width: 12.5em;
+        min-width: 15em;
         right: 0;
         top: 0;
-        z-index: 1;
+        z-index: 2;
     }
 
     .border {
@@ -70,7 +70,7 @@
 
         flex: 0 1 auto;
 
-        background-color: var(--fg-color);
+        background: var(--fg-color);
     }
 
 </style>

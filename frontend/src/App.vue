@@ -5,7 +5,6 @@
     import NavBar from '@/components/NavBar.vue';
     import Spes3D from '@/components/Spes3D.vue';
     import MetaBalls from '@/components/MetaBalls.vue';
-import { start } from 'repl';
 
     const roleList = [
         'Designer',
@@ -23,10 +22,7 @@ import { start } from 'repl';
     ]
 
     // parallax layers
-    let farBackground = 1/8;
-    let background = 1/4;
-    let midground = 1/2;
-    let foreground = 5/4;
+    let bg2, bg1, bg0, fg0, fg1, fg2;
 
     const pauseRole = ref(false);
 
@@ -34,6 +30,8 @@ import { start } from 'repl';
     const showMetaBalls = ref(false);
 
     const slideDuration = ref(500);
+
+    const currentWidth = ref(window.innerWidth);
 
     function wiggleLogo() {
         // can't use ':hover' so doing it manually
@@ -56,8 +54,7 @@ import { start } from 'repl';
         }
         else if (window.scrollY < endY) {
             const x = (window.scrollY - startY) / (endY - startY) * (endPos[0] - startPos[0]) + startPos[0];
-            const y = (window.scrollY - startY) / (endY - startY) * (endPos[1] - startPos[1]);
-            console.log(x, y)
+            const y = (window.scrollY - startY) / (endY - startY) * (endPos[1] - startPos[1]) + startPos[1];
             return [x, y];
         }
         else {
@@ -80,7 +77,14 @@ import { start } from 'repl';
         const aboutText = document.getElementById('about-text');
 
         window.onscroll = () => {
-            if (landingPage && window.scrollY < landingPage.getBoundingClientRect().height/2) {
+            currentWidth.value = window.innerWidth; 
+
+            if (window.scrollY > document.body.scrollHeight / 2) {
+                document.documentElement.style.setProperty('--fg-color', '#110707');
+                document.documentElement.style.setProperty('--bg-color', '#fbf5f5');
+                document.documentElement.style.setProperty('--accent-color', '#8cc77c');
+            }
+            else if (landingPage && window.scrollY < landingPage.getBoundingClientRect().height/2) {
                 if (noiseContainer) noiseContainer.style.opacity = "0";
                 if (metaballContainer) metaballContainer.style.opacity = "0";
                 showMetaBalls.value = false;
@@ -97,18 +101,31 @@ import { start } from 'repl';
                 document.documentElement.style.setProperty('--accent-color', '#ff00ff');
             }
 
-            // Parallax effects
-            farBackground = - window.scrollY * 5/4;
-            background = - window.scrollY * 1/2;
-            midground = - window.scrollY * 1/4;
-            foreground = - window.scrollY * 1/8;
+            // Parallax effects (fg faster than with nothing, bg slower than with nothing, higher number = more drastic change)
+            
+            bg2 = window.scrollY * 1/8;
+            bg1 = window.scrollY * 1/4;
+            bg0 = window.scrollY * 3/4;
+            // nothing applied fits here
+            fg0 = - window.scrollY * 3/4;
+            fg1 = - window.scrollY * 1/4;
+            fg2 = - window.scrollY * 1/8;
 
-            // vertical
-            if (metaballContainer) metaballContainer.style.transform = `translateY(${background}px)`;
-            if (mascotContainer) mascotContainer.style.transform = `translateY(${background}px)`;
-            if (arrowIcon) arrowIcon.style.transform = `translateY(${midground}px)`;
+            if (mascotContainer) mascotContainer.style.transform = `translateY(${fg1}px)`;
+            if (arrowIcon) arrowIcon.style.transform = `translateY(${fg0}px)`;
 
-            // horizontal
+            // special case, want to scroll from 0% to 100% between start and end of page
+            if (metaballContainer) {
+                const metaballContainerRect = metaballContainer.getBoundingClientRect();
+                metaballContainer.style.transform =`translateY(${clampedParallaxFromScroll(
+                    0,
+                    document.body.scrollHeight + window.innerHeight,
+                    [0, 0],
+                    [0, -metaballContainerRect.height]
+                )[1]}px)`;
+            }
+
+            // horizontal scroll fx
 
             if (aboutHeader) {
                 const aboutHeaderRect = aboutHeader.getBoundingClientRect();
@@ -123,7 +140,7 @@ import { start } from 'repl';
             if (aboutText) {
                 const aboutTextRect = aboutText.getBoundingClientRect();
                 aboutText.style.transform =`translateX(${clampedParallaxFromScroll(
-                    aboutTextRect.top, // when first shown
+                    aboutTextRect.top,
                     aboutTextRect.top + window.innerHeight/2,
                     [aboutTextRect.width, 0],
                     [0, 0]
@@ -218,14 +235,14 @@ import { start } from 'repl';
         <!-- ABOUT SECTION -->
 
         <div class="section" id="about" style="height: 100vh; width: 100%;">
-            <div class="overlay" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 3em;">
-                <div style="width: 100%; display: flex; justify-content: start;">
+            <div style=" width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 3em;">
+                <div class="overlay" style="display: flex; justify-content: start;">
                     <p id="about-header">
                         About
                     </p>
                 </div>
                 
-                <div style="width: 100%; display: flex; justify-content: end;">
+                <div class="overlay" style="display: flex; justify-content: end;">
                     <p id="about-text" style="padding-top: 3em; text-align: right; font-size: 0.75em; max-width: 20em;">
                         Some example text about me would go here, but for now I'm leaving it like this.
                         <br><br>
@@ -234,6 +251,46 @@ import { start } from 'repl';
                 </div>
                 
             </div>
+        </div>
+
+        <div class="section" id="projects" style="height: 100vh; width: 100%;">
+            <div style=" width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 3em;">
+                <div class="overlay" style="display: flex; justify-content: center;">
+                    <p id="projects-header">
+                        Projects
+                    </p>
+                </div>
+                
+                <div class="overlay" style="display: flex; justify-content: start;">
+                    <p id="projects-text" style="padding-top: 3em; font-size: 0.75em;">
+                        Some example text about me would go here, but for now I'm leaving it like this.
+                        <br><br>
+                        I'll even put this second filler paragraph for now.
+                    </p>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="section" id="contact" style="width: calc(100% - 6em); background: var(--fg-color); color: var(--bg-color); padding: 3em;">
+            <div class="overlay"
+                style="max-width: 100%; display: flex; justify-content: center; align-items: center; font-size: 1.5em; gap: 1em; text-align: center;"
+                :style="`flex-direction: ${currentWidth < 700 ? 'column' : 'row'}; `"
+            >
+                <object
+                    type="image/svg+xml"
+                    data="spes_logo.svg"
+                    width="32px"
+                ></object>
+                <p>
+                    email: sanctusspes@gmail.com
+                </p>
+                <a target="_blank" rel="noopener noreferrer" href="https://github.com/jcr3/jcr3.github.io" style="color: var(--bg-color);">Site Source Code</a>
+                <p>
+                    © 2025 JC Redmond III
+                </p>
+            </div>
+            
         </div>
     </div>
 
@@ -244,11 +301,11 @@ import { start } from 'repl';
 
     #home-page {
         color: var(--fg-color);
-        background-color: var(--bg-color);
+        background: var(--bg-color);
         overflow: hidden;
         
         position: relative;
-        transition: all 3s;
+        transition: all var(--transition-time);
     }
 
     #mascot-container {
@@ -290,7 +347,7 @@ import { start } from 'repl';
 
     #noise-container {
         opacity: 0;
-        transition: opacity 3s;
+        transition: opacity var(--transition-time);
     }
 
     #noise-texture:after {
@@ -302,20 +359,21 @@ import { start } from 'repl';
         height: 200%;
         top: -50%;
         left: -50%;
-        opacity: 0.2;
+        opacity: 0.1;
     }
 
     #metaball-container {
         position: fixed;
         width: 100%;
-        height: 100%;
-        top: 50%;
+        height: 200vh;
+        top: 0;
         opacity: 0;
-        transition: opacity 1.5s;
+        transition: opacity calc(var(--transition-time)/2);
     }
 
     #logo {
         transition: transform 0.15s;
+        z-index: 1;
         filter: blur(0.05em);
         transform: rotate(0deg) translateY(-1em);
     }

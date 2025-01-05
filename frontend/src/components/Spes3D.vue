@@ -269,14 +269,14 @@
         position: absolute;
         left: 0;
         top: 0;
-        width: 100vw;
+        width: 100%;
         height: 100%;
 
         mix-blend-mode: screen;
 
         pointer-events: none;
 
-        transition: color background-color 3s;
+        transition: color background-color var(--transition-time);
         filter: opacity(0); /* bring to 100 once loaded */
     }
 </style>
