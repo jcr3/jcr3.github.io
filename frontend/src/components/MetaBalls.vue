@@ -2,6 +2,8 @@
     import { onMounted } from 'vue';
     import { makeNoise3D } from 'fast-simplex-noise';
 
+    
+
     type Gradient = {
         radius: number,
         noiseOffset: number
@@ -14,13 +16,23 @@
     }
     
     let accentColor = hexToRGB("#ff00ff");//hexToRGB(getComputedStyle(document.documentElement).getPropertyValue('--accent-color'));
-    const colorSpread = 255;
+    let colorSpread = 255;
     const positionSpread = 1;
     const trailSpread = 1;
 
     const sizeFactor = 1.5;
     const speedFactor = 0.7;
-    const colorBlendFactor = 0.1; // lower is slower
+    const colorBlendFactor = 0.5; // lower is slower
+
+    const framerate = 24; // fps
+
+    let threshold = 0.5; // 0 to 1
+    let mode = 1; // 0, 1 or 2
+
+    let blur = 0.1;
+    if (mode != 0) blur = 1;
+    let additionalCss = `filter: blur(${blur}em);`;
+    if (mode == 1) additionalCss = `filter: blur(${blur}em) brightness(calc(100% + 50%)) contrast(1000%);`
 
     const positionNoise = makeNoise3D();
 
@@ -94,7 +106,7 @@
 
         let baseRadius = Math.max(800, canvas.width);
 
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d", {"willReadFrequently": true});
 
         var gradients: Array<Gradient> = [];
         
@@ -116,6 +128,8 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             accentColor = hexToRGB(getComputedStyle(document.documentElement).getPropertyValue('--accent-color'));
+
+            if(mode == 0) colorSpread = 0;
 
             gradients.forEach((gradient) => {
                 
@@ -149,13 +163,40 @@
                 })
                 
             });
+
+            // apply a threshold by opacity on all the graidents to get the metaballs effect
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+
+            // mode 1 standard
+            if (mode == 0) {
+                for (let i = 0; i < data.length; i += 4) {
+                    if (data[i + 3] < threshold * 255) {
+                        data[i + 3] = 0;
+                    }
+                    else data[i + 3] = 255;
+                }
+            }
+            else if (mode == 1) {
+                for (let i = 0; i < data.length; i += 4) {
+                    if (data[i + 3] < threshold * 255) {
+                        data[i] = 0; // red
+                        data[i + 1] = 0; // green
+                        data[i + 2] = 0; //blue
+                    }
+                }
+            }
+            ctx.putImageData(imageData, 0, 0);   
         }
 
-        let t = 0;
+        const startTime = Date.now()
+        let lastTime = startTime;
         setInterval(() => {
-            animate(t);
-            t += 12/1000;
-        }, 1000/12); // 12 frames per seconds
+            if (Date.now() - lastTime >= 1000/framerate){
+                animate((Date.now() - startTime) / 10000);
+                lastTime = Date.now();
+            }
+        }, 1);
     })
 
 </script>
@@ -164,6 +205,7 @@
     <div id="container">
         <canvas
             id="metaballs-canvas"
+            :style="additionalCss"
         >
         </canvas>
     </div>
@@ -184,7 +226,6 @@
     }
 
     #metaballs-canvas {
-        filter: blur(1em);
         width: 100%;
         height: 100%;
     }

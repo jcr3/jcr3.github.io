@@ -77,14 +77,19 @@
         const aboutText = document.getElementById('about-text');
 
         window.onscroll = () => {
-            currentWidth.value = window.innerWidth; 
+            currentWidth.value = window.innerWidth;
+
+            // get all elements of overlay class
+            // if element is in central band of screen unblur
 
             if (window.scrollY > document.body.scrollHeight / 2) {
+                // projects
                 document.documentElement.style.setProperty('--fg-color', '#110707');
                 document.documentElement.style.setProperty('--bg-color', '#fbf5f5');
                 document.documentElement.style.setProperty('--accent-color', '#8cc77c');
             }
             else if (landingPage && window.scrollY < landingPage.getBoundingClientRect().height/2) {
+                // landing page
                 if (noiseContainer) noiseContainer.style.opacity = "0";
                 if (metaballContainer) metaballContainer.style.opacity = "0";
                 showMetaBalls.value = false;
@@ -93,6 +98,7 @@
                 document.documentElement.style.setProperty('--accent-color', '#f5be09');
             }
             else {
+                // about
                 if (noiseContainer) noiseContainer.style.opacity = "1";
                 if (metaballContainer) metaballContainer.style.opacity = "1";
                 showMetaBalls.value = true;
@@ -243,10 +249,11 @@
                 </div>
                 
                 <div class="overlay" style="display: flex; justify-content: end;">
-                    <p id="about-text" style="padding-top: 3em; text-align: right; font-size: 0.75em; max-width: 20em;">
-                        Some example text about me would go here, but for now I'm leaving it like this.
+                    <p id="about-text" style="padding-top: 3em; text-align: right; font-size: 0.75em; max-width: 25em;">
+                        Multidisciplinary creative with a focus in product design, prototyping, software develoment, painting, drawing, 
+                        music, and film - particullarly when they align with one of arguablly too many hobbies.
                         <br><br>
-                        I'll even put this second filler paragraph for now.
+                        Currently based in Glasgow, UK but originally from Atlanata, Ga with a year in Milan, Italy. 
                     </p>
                 </div>
                 
@@ -263,9 +270,7 @@
                 
                 <div class="overlay" style="display: flex; justify-content: start;">
                     <p id="projects-text" style="padding-top: 3em; font-size: 0.75em;">
-                        Some example text about me would go here, but for now I'm leaving it like this.
-                        <br><br>
-                        I'll even put this second filler paragraph for now.
+                        Loading...
                     </p>
                 </div>
                 
@@ -348,6 +353,8 @@
     #noise-container {
         opacity: 0;
         transition: opacity var(--transition-time);
+        
+        mix-blend-mode: color-dodge;
     }
 
     #noise-texture:after {
@@ -359,7 +366,6 @@
         height: 200%;
         top: -50%;
         left: -50%;
-        opacity: 0.1;
     }
 
     #metaball-container {
