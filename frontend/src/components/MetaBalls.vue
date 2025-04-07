@@ -24,7 +24,7 @@
     const speedFactor = 0.7;
     const colorBlendFactor = 0.5; // lower is slower
 
-    const framerate = 24; // fps
+    const framerate = 12; // fps
 
     let threshold = 0.5; // 0 to 1
     let mode = 1; // 0, 1 or 2

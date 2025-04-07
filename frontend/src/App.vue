@@ -74,16 +74,19 @@
         const mascotContainer = document.getElementById('mascot-container');
         const arrowIcon = document.getElementById('arrow-icon');
         const aboutHeader = document.getElementById('about-header');
-        const aboutText = document.getElementById('about-text');
+        const aboutText1 = document.getElementById('about-text-1');
+        const aboutText2 = document.getElementById('about-text-2');
 
         window.onscroll = () => {
             currentWidth.value = window.innerWidth;
 
-            // get all elements of overlay class
+            // get all elements of overlay-header class
             // if element is in central band of screen unblur
 
             if (window.scrollY > document.body.scrollHeight / 2) {
                 // projects
+                if (metaballContainer) metaballContainer.style.opacity = "1";
+                showMetaBalls.value = true;
                 document.documentElement.style.setProperty('--fg-color', '#110707');
                 document.documentElement.style.setProperty('--bg-color', '#fbf5f5');
                 document.documentElement.style.setProperty('--accent-color', '#8cc77c');
@@ -136,19 +139,29 @@
             if (aboutHeader) {
                 const aboutHeaderRect = aboutHeader.getBoundingClientRect();
                 aboutHeader.style.transform =`translateX(${clampedParallaxFromScroll(
+                    aboutHeaderRect.top - window.innerHeight/2,
                     aboutHeaderRect.top,
-                    aboutHeaderRect.top + window.innerHeight/2,
-                    [-aboutHeaderRect.width -16, 0],
+                    [-aboutHeaderRect.width -36, 0],
                     [0, 0]
                 )[0]}px)`;
             }
             
-            if (aboutText) {
-                const aboutTextRect = aboutText.getBoundingClientRect();
-                aboutText.style.transform =`translateX(${clampedParallaxFromScroll(
-                    aboutTextRect.top,
-                    aboutTextRect.top + window.innerHeight/2,
-                    [aboutTextRect.width, 0],
+            if (aboutText1) {
+                const aboutTextRect1 = aboutText1.getBoundingClientRect();
+                aboutText1.style.transform =`translateX(${clampedParallaxFromScroll(
+                    aboutTextRect1.top - window.innerHeight/2,
+                    aboutTextRect1.top,
+                    [aboutTextRect1.width, 0],
+                    [0, 0]
+                )[0]}px)`;
+            }
+
+            if (aboutText2) {
+                const aboutTextRect2 = aboutText2.getBoundingClientRect();
+                aboutText2.style.transform =`translateX(${clampedParallaxFromScroll(
+                    aboutTextRect2.top - window.innerHeight/2,
+                    aboutTextRect2.top,
+                    [-aboutTextRect2.width, 0],
                     [0, 0]
                 )[0]}px)`;
             }
@@ -210,12 +223,12 @@
             </div>
             
             <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 30vh;">
-                <p class="overlay">
+                <p class="overlay-header">
                     Hello, my name is JC and I am a
                 </p>
                 <p
                     id="role"
-                    class="overlay"
+                    class="overlay-header"
                     style="font-style: italic; text-align: right;"
                     @mouseover="() => {pauseRole = true}"
                     @mouseout="() => {pauseRole = false}"
@@ -228,7 +241,7 @@
                 :duration="slideDuration"
                 icon="material-symbols:arrow-circle-down"
                 id="arrow-icon"
-                class="overlay"
+                class="overlay-header"
                 style="width: 1em; position: absolute; bottom: 1.5em; right: 20%;"
             />
             
@@ -242,34 +255,49 @@
 
         <div class="section" id="about" style="height: 100vh; width: 100%;">
             <div style=" width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 3em;">
-                <div class="overlay" style="display: flex; justify-content: start;">
+                <div class="overlay-header" style="display: flex; justify-content: start;">
                     <p id="about-header">
                         About
                     </p>
                 </div>
                 
-                <div class="overlay" style="display: flex; justify-content: end;">
-                    <p id="about-text" style="padding-top: 3em; text-align: right; font-size: 0.75em; max-width: 25em;">
-                        Multidisciplinary creative with a focus in product design, prototyping, software develoment, painting, drawing, 
-                        music, and film - particullarly when they align with one of arguablly too many hobbies.
+                <div class="overlay-section" style="display: flex; flex-direction: column; align-items: end; padding-top: 1em;">
+                    <p id="about-text-1" style="text-align: right; max-width: 30em;">
+                        Multidisciplinary creative with a focus in <b>product design & prototyping</b>, <b>software develoment</b>, 
+                        <b>painting & drawing</b>, <b>music</b>, and <b>film</b> - particullarly when they align with one of arguablly too many hobbies.
                         <br><br>
-                        Currently based in Glasgow, UK but originally from Atlanata, Ga with a year in Milan, Italy. 
+                        <i>Currently based in Glasgow, Scotland but originally from Atlanta, Ga.</i>
                     </p>
                 </div>
+                <br>
+                <div class="overlay-section" style="display: flex; flex-direction: column; align-items: start;">
+                    <p id="about-text-2" style="max-width: 25em;">
+                        Graduated with a <b>BEng Mechatronics</b> degree from the University of Glasgow in 2024 and currently working as a 
+                        <b>Sr. R&D Engineer</b> at Synopsys.
+                    </p>
+                </div>
+
+                <Icon v-motion-slide-visible-once-bottom
+                    :duration="slideDuration"
+                    icon="material-symbols:arrow-circle-down"
+                    id="arrow-icon-2"
+                    class="overlay-header"
+                    style="width: 1em; position: absolute; bottom: 7em; right: 30%;"
+                />
                 
             </div>
         </div>
 
         <div class="section" id="projects" style="height: 100vh; width: 100%;">
-            <div style=" width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 3em;">
-                <div class="overlay" style="display: flex; justify-content: center;">
+            <div style=" width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 1em;">
+                <div class="overlay-header" style="display: flex; justify-content: center;">
                     <p id="projects-header">
                         Projects
                     </p>
                 </div>
                 
-                <div class="overlay" style="display: flex; justify-content: start;">
-                    <p id="projects-text" style="padding-top: 3em; font-size: 0.75em;">
+                <div class="overlay-section" style="display: flex; justify-content: start;">
+                    <p id="projects-text" style="padding-top: 3em;">
                         Loading...
                     </p>
                 </div>
@@ -278,7 +306,7 @@
         </div>
 
         <div class="section" id="contact" style="width: calc(100% - 6em); background: var(--fg-color); color: var(--bg-color); padding: 3em;">
-            <div class="overlay"
+            <div class="overlay-header"
                 style="max-width: 100%; display: flex; justify-content: center; align-items: center; font-size: 1.5em; gap: 1em; text-align: center;"
                 :style="`flex-direction: ${currentWidth < 700 ? 'column' : 'row'}; `"
             >
@@ -304,6 +332,18 @@
 
 <style scoped>
 
+    b {
+        font-weight: bold;
+        font-style: italic;
+        font-size: 1.1em;
+        color: var(--accent-color);
+        -webkit-text-stroke: var(--fg-color) 0.005em;
+    }
+
+    i {
+        font-style: italic;
+    }
+
     #home-page {
         color: var(--fg-color);
         background: var(--bg-color);
@@ -327,7 +367,7 @@
         position: relative;
     }
 
-    .overlay {
+    .overlay-header {
         font-family: monospace;
         font-weight: bolder;
         font-size: 3em;
@@ -336,12 +376,24 @@
         text-align: left;
         padding: 0.25em;
         width: calc(100% - 2 * 0.25em);
-        max-width: 30em;
+        max-width: 1168px;
         -webkit-text-stroke: var(--accent-color) 0.005em;
         filter: blur(0.025em);
     }
-    .overlay:hover {
+    .overlay-header:hover {
         filter: blur(0.015em);
+    }
+    .overlay-section {
+        font-family: monospace;
+        font-size: 2.25em;
+        letter-spacing: -0.03em;
+        word-spacing: -0.1em;
+        padding: 0.25em;
+        max-width: 1168px;
+        width: calc(100% - 2 * 0.25em);
+        -webkit-text-stroke: var(--accent-color) 0.005em;
+        filter: blur(0.015em);
+
     }
 
     #navBarIcon {
