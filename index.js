@@ -28,9 +28,9 @@ document.addEventListener('mousemove', function(event) {
 
 var r = document.querySelector(':root');
 function updateColor() {
-    r.style.setProperty('--accent-color', `rgba(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255}, ${Math.random()*100+155})`);
+    r.style.setProperty('--accent-color', `rgba(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255}, ${Math.random()})`);
 }
-updateColor();
+//updateColor();
 
 
 bgText.style.fontSize = `${bg_font_size}px`;
