@@ -3,22 +3,30 @@
 }
 
 html, body {
-    width: 100%;
-    height: 100%;
     margin: 0px;
     padding: 0px;
+    height: 100%;
 }
 div, p {
     margin: 0px;
     padding: 0px;
 }
 
+@font-face {
+    font-family: 'Terminal Grotesque';
+    src: url(fonts/terminal-grotesque.woff2);
+}
+@font-face {
+    font-family: 'Mrs Eaves';
+    src: url(fonts/mrs-eaves/Mrs-Eaves-Lining-OT-.otf);
+}
+
 #bg {
     display: flex;
     justify-content: center;
     background-color: rgb(42, 40, 38);
-    height: 100%;
     width: 100%;
+    height: 100%;
     position: relative;
     overflow: hidden;
     z-index: 0;
@@ -30,15 +38,14 @@ div, p {
     left: 0px;
     top: 0px;
     margin: 0px;
-    height: 100%;
     width: 100%;
+    min-height: 100%;
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
     z-index: 0;
 }
 
 #grad {
-    position: absolute;
     position: absolute;
     left: 0px;
     top: 0px;
@@ -49,39 +56,72 @@ div, p {
     z-index: 0;
 }
 
-#main {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    max-width: 900px;
-    height: 600px;
+#fg {
+    width: 900px;
+    min-height: 900px;
     text-align: center;
-    margin: max(64px, 5vh) 8px 0px 8px;
+    margin: 64px 16px 0px 8px;
     border-radius: 4px;
-    position: sticky;
-    background-image: url("/pixel.png");
+    background-image: url(/pixel2.png);
     background-size: 900px;
-    color: white;
-    font-family: Arial, Helvetica, sans-serif;
+    background-repeat: no-repeat;
+    filter: drop-shadow(0px 16px 16px rgb(18, 20, 18));
+    color: rgb(42, 41, 41);
+    font-family: 'Mrs Eaves';
+}
+
+#content {
+    position: absolute;
+    background-color: rgb(204, 214, 238);
+    width:650px;
+    height: 490px;
+    left: 176px;
+    top: 90px;
+    animation: heavyFlicker 1s ease-in;
+    box-shadow: 0 0 20px rgba(255, 108, 78, 0.2);
+}
+
+#frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 900px;
+    pointer-events: none;
 }
 
 #nav-bar {
     display: flex;
     flex-direction: column;
-    min-height: 100%;
     width: fit-content;
-    padding: 8px;
     text-align: center;
 }
 
-#content {
-    display: flex;
-    flex: 1 1 auto;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-}
-
+@keyframes heavyFlicker {
+    0% {
+      opacity: 1;
+    }
+    20% {
+        opacity: 1;
+    }
+    25% {
+      opacity: 0.9;
+    }
+    26% {
+        opacity: 1;
+    }
+    75% {
+        opacity: 1;
+    }
+    79% {
+      opacity: 0.7;
+    }
+    80% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 @keyframes flicker {
     0% {
       opacity: 0.1;
@@ -90,10 +130,10 @@ div, p {
       opacity: 0.15;
     }
     50% {
-      opacity: 0.02;
+      opacity: 0.2;
     }
     75% {
-      opacity: 0.0.8;
+      opacity: 0.1;
     }
     100% {
       opacity: 0.0;
@@ -128,7 +168,7 @@ background: rgba(18, 16, 16, 0.1);
 opacity: 0;
 z-index: 2;
 pointer-events: none;
-animation: flicker 0.05s infinite;
+animation: flicker 0.12s infinite;
 }
 .crt::before {
 content: " ";

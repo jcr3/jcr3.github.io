@@ -21,8 +21,8 @@ let currentCell = {
 };
 document.addEventListener('mousemove', function(event) {
     currentCell = {
-        x: Math.floor(event.clientX / bg_font_size),
-        y: Math.floor(event.clientY / bg_font_size)
+        x: Math.floor((event.clientX + window.scrollX) / bg_font_size),
+        y: Math.floor((event.clientY + window.scrollY) / bg_font_size)
     };
 });
 
