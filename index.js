@@ -1,3 +1,14 @@
+const faceText = document.getElementById("face");
+let count = 0;
+function blink() {
+    if (count == 0) faceText.textContent = '-_-';
+    else if (Math.random() > 0.5 && count == 2) faceText.textContent = '-_-';
+    else faceText.textContent = '^_^';
+    count++;
+    if (count > 20) count = 0;
+}
+var blinkInterval = setInterval(blink, 100);
+
 const bgText = document.getElementById("bg-text");
 let bgBox = document.getElementById("bg").getBoundingClientRect();
 // $@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,"^`.

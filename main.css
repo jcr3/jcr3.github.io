@@ -95,23 +95,26 @@ div, p {
     0% {
       opacity: 1;
     }
-    20% {
+    15% {
         opacity: 1;
     }
     25% {
       opacity: 0.9;
     }
-    26% {
+    35% {
         opacity: 1;
     }
     75% {
         opacity: 1;
     }
     79% {
-      opacity: 0.7;
+      opacity: 0.9;
     }
     80% {
       opacity: 1;
+    }
+    90% {
+      opacity: 0.7;
     }
     100% {
       opacity: 1;
@@ -119,16 +122,16 @@ div, p {
   }
 @keyframes flicker {
     0% {
-      opacity: 0.1;
+      opacity: 0.05;
     }
     25% {
-      opacity: 0.15;
+      opacity: 0.1;
     }
     50% {
-      opacity: 0.2;
+      opacity: 0.03;
     }
     75% {
-      opacity: 0.1;
+      opacity: 0.07;
     }
     100% {
       opacity: 0.0;
