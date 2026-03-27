@@ -9,6 +9,14 @@ function blink() {
 }
 var blinkInterval = setInterval(blink, 100);
 
+let artwork = document.getElementById("artwork");
+let contentContainer = document.getElementById("content-container");
+
+function scaleContent() {
+    console.log(artwork.scrollHeight)
+    contentContainer.style.height = `${artwork.scrollHeight}px`;
+}
+
 const bgText = document.getElementById("bg-text");
 // $@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,"^`.
 // ✪✿◉❂✽✹✸✷✱★✦◍✾✮◎❋❊❉❈❇❆❅❄❃❁❀✺✵✫✭✻✼✴✬✯✳✲✧✩✰○◌✶•..
@@ -21,6 +29,7 @@ let num_for_height = Math.ceil(document.documentElement.scrollHeight / bg_font_s
 let num_for_width = Math.ceil(document.documentElement.scrollWidth / bg_font_size);
 window.addEventListener("resize", (event)=>{
     updateGridSize();
+    scaleContent();
 });
 
 function updateGridSize() {
@@ -98,6 +107,7 @@ function frame() {
 
 function init() {
     updateGridSize();
+    scaleContent();
     setInterval(frame, 1000 / 30);
 }
 window.addEventListener("load", init);
