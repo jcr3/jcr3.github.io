@@ -10,7 +10,6 @@ function blink() {
 var blinkInterval = setInterval(blink, 100);
 
 const bgText = document.getElementById("bg-text");
-let bgBox = document.getElementById("bg").getBoundingClientRect();
 // $@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,"^`.
 // ✪✿◉❂✽✹✸✷✱★✦◍✾✮◎❋❊❉❈❇❆❅❄❃❁❀✺✵✫✭✻✼✴✬✯✳✲✧✩✰○◌✶•..
 const ascii_grad = '✪◉✽✸✱✦✾◎❊❈❆❄❁✺✫✻✴✯✲✩○✶.';
@@ -18,13 +17,16 @@ const ambient_grad = '....✶✶✶✩✩✯✯✲✯✯✩✩✶✶✶....';
 const bg_font_size = 32;
 
 // num of total cells
-let num_for_height = Math.ceil(bgBox.height / bg_font_size);
-let num_for_width = Math.ceil(bgBox.width / bg_font_size);
+let num_for_height = Math.ceil(document.documentElement.scrollHeight / bg_font_size);
+let num_for_width = Math.ceil(document.documentElement.scrollWidth / bg_font_size);
 window.addEventListener("resize", (event)=>{
-    bgBox = document.getElementById("bg").getBoundingClientRect();
-    num_for_height = Math.ceil(bgBox.height / bg_font_size);
-    num_for_width = Math.ceil(bgBox.width / bg_font_size);
+    updateGridSize();
 });
+
+function updateGridSize() {
+    num_for_height = Math.ceil(document.documentElement.scrollHeight / bg_font_size);
+    num_for_width = Math.ceil(document.documentElement.scrollWidth / bg_font_size);
+}
 
 let currentCell = {
     x: -1,
@@ -47,8 +49,6 @@ function updateColor() {
 bgText.style.fontSize = `${bg_font_size}px`;
 bgText.style.lineHeight = `${bg_font_size}px`;
 bgText.style.letterSpacing = `${bg_font_size * 2/5}px`;
-
-var interval = setInterval(frame, 1000 / 30);
 
 const max_grad_id = ascii_grad.length - 1;
 let current_grad_id = 0;
@@ -95,3 +95,9 @@ function frame() {
         bgText.textContent += '\n';
     }
 }
+
+function init() {
+    updateGridSize();
+    setInterval(frame, 1000 / 30);
+}
+window.addEventListener("load", init);

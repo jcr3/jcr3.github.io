@@ -5,7 +5,6 @@
 html, body {
     margin: 0px;
     padding: 0px;
-    height: 100%;
 }
 div, p {
     margin: 0px;
@@ -23,18 +22,18 @@ div, p {
 
 #bg {
     display: flex;
-    min-height: 100%;
+	min-height: 100vh;
+    width: 100%;
     justify-content: center;
     background-color: rgb(42, 40, 38);
-    position: relative;
     z-index: 0;
+	position: relative;
 }
 
 #bg-text {
     color: var(--accent-color);
-    margin: 0px;
-    width: 100%;
-    min-height: 100%;
+	height: 100%;
+	width: 100%;
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
     z-index: 0;
@@ -42,82 +41,119 @@ div, p {
 
 #grad {
     position: absolute;
-    left: 0px;
-    top: 0px;
-    margin: 0px;
-    height: 100%;
-    width: 100%;
-    background: radial-gradient(rgba(0,0,0,0), rgba(0,0,0,0.4));
+    inset: 0;
+    background: radial-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0) 70%, rgba(15, 6, 21, 0.2) 100%);
     z-index: 0;
 }
 
-#fg {
-    width: 900px;
-    min-height: 900px;
-    text-align: center;
-    margin: 64px 48px 0px 8px;
-    border-radius: 4px;
-    background-image: url(/pixel2.png);
-    background-size: 900px;
-    background-repeat: no-repeat;
-    filter: drop-shadow(0px 16px 16px rgb(18, 20, 18));
-    color: rgb(42, 41, 41);
-    font-family: 'Mrs Eaves';
+#fg-container {
+    width: min(900px, 100%);
+	padding: 64px 16px 64px 16px;
+    align-items: center;
+    display: grid;
+    z-index: 2;
 }
 
-#content {
-    position: absolute;
-    background-color: rgb(204, 214, 238);
-    width:650px;
-    height: 490px;
-    left: 176px;
-    top: 90px;
-    animation: heavyFlicker 1s ease-in;
-    box-shadow: 0 0 20px rgba(255, 108, 78, 0.2);
+#artwork {
+    width: 100%;
+    grid-area: 1 / 1;
+    filter: drop-shadow(-8px 16px 16px rgb(18, 20, 18));
 }
 
 #frame {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 900px;
+    width: 100%;
+    grid-area: 1 / 1;
     pointer-events: none;
+    z-index: 2;
+}
+
+#content-container {
+    grid-area: 1 / 1;
+    display: flex;
+	flex-direction: column;
+	z-index: 1;
+	padding-top: 7%;
+	height: 100%;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+#first-row {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	height: 63.5%;
+	padding-left: 2%;
+	box-sizing: border-box;
+	gap: 5%;
 }
 
 #nav-bar {
-    display: flex;
-    flex-direction: column;
-    width: fit-content;
-    text-align: center;
+	width: 15%;
+	border: 4px solid coral;
+    height: 62%;
+	box-sizing: border-box;
+}
+
+#content {
+    background-color: rgb(204, 214, 238);
+	font-family: 'Mrs Eaves';
+    width: 71%;
+    height: 60.5%;
+	margin-top: 4%;
+	box-sizing: border-box;
+	text-align: center;
+    animation: heavyFlicker 1s ease-in;
+    box-shadow: 0 0 20px rgba(255, 108, 78, 0.2);
+	overflow: auto;
+}
+
+#second-row {
+	width: 100%;
+	height: 30%;
+	padding-left: 23%;
+	box-sizing: border-box;
+}
+
+#chat-room {
+    background-color: rgb(204, 214, 238);
+	text-align: center;
+	font-family: 'Mrs Eaves';
+    animation: heavyFlicker 1s ease-in;
+    box-shadow: 0 0 20px rgba(255, 108, 78, 0.2);
+	width: 87%;
+	height: 100%;
+	box-sizing: border-box;
+	overflow: auto;
 }
 
 @keyframes heavyFlicker {
     0% {
-      opacity: 1;
+      	filter: opacity(1);
     }
     15% {
-        opacity: 1;
+        filter: opacity(1);
     }
     25% {
-      opacity: 0.9;
+		filter: opacity(0.9);
     }
     35% {
-        opacity: 1;
+        filter: opacity(1);
     }
     75% {
-        opacity: 1;
+        filter: opacity(1);
     }
     79% {
-      opacity: 0.9;
+        filter: opacity(0.9);
     }
     80% {
-      opacity: 1;
+        filter: opacity(1);
     }
     90% {
-      opacity: 0.7;
+        filter: opacity(0.7);
     }
     100% {
-      opacity: 1;
+        filter: opacity(1);
     }
   }
 @keyframes flicker {
@@ -164,7 +200,7 @@ bottom: 0;
 right: 0;
 background: rgba(18, 16, 16, 0.1);
 opacity: 0;
-z-index: 2;
+z-index: 0;
 pointer-events: none;
 animation: flicker 0.12s infinite;
 }
@@ -177,7 +213,7 @@ left: 0;
 bottom: 0;
 right: 0;
 background: linear-gradient(rgba(18, 16, 16, 0), rgba(0, 0, 0, 0.05)), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-z-index: 2;
+z-index: 0;
 background-size: 100% 8px, 4px 100%;
 pointer-events: none;
 }
