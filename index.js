@@ -1,19 +1,7 @@
-const faceText = document.getElementById("face");
-let count = 0;
-function blink() {
-    if (count == 0) faceText.textContent = '-_-';
-    else if (Math.random() > 0.5 && count == 2) faceText.textContent = '-_-';
-    else faceText.textContent = '^_^';
-    count++;
-    if (count > 20) count = 0;
-}
-var blinkInterval = setInterval(blink, 100);
-
 let artwork = document.getElementById("artwork");
 let contentContainer = document.getElementById("content-container");
 
 function scaleContent() {
-    console.log(artwork.scrollHeight)
     contentContainer.style.height = `${artwork.scrollHeight}px`;
 }
 

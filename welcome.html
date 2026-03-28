@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="icon" href="/favicon.ico">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Welcome</title>
+		<link rel="stylesheet" crossorigin href="/main.css">
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const faceText = document.getElementById("face");
+                let count = 0;
+                function blink() {
+                    if (faceText != null) {
+                        if (count == 0) faceText.textContent = '-_-';
+                        else if (Math.random() > 0.5 && count == 2) faceText.textContent = '-_-';
+                        else faceText.textContent = '^_^';
+                        count++;
+                        if (count > 20) count = 0;
+                    }
+                }
+                var blinkInterval = setInterval(blink, 100);
+            });
+        </script>
+	</head>
+	<body>
+		<div class="page">
+            <h1>
+                Hi I'm JC! Welcome to my website!
+                <br>
+                <br>
+            </h1>
+            <h2 id="face">
+                ^_^
+            </h2>
+            <br>
+            Here is a ton more text so I can test out the scrolling capabilities of this.
+            <br>
+            ___
+            <br>
+            <br>
+            <img src="/pic.jpg" style="width: 50%;">
+            <br>
+            <br>
+        </div>
+  	</body>
+</html>
