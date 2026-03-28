@@ -20,6 +20,17 @@ div, p {
     src: url(fonts/mrs-eaves/Mrs-Eaves-Lining-OT-.otf);
 }
 
+.pixel-art { 
+    image-rendering: optimizeSpeed;             /* STOP SMOOTHING, GIVE ME SPEED  */
+    image-rendering: -moz-crisp-edges;          /* Firefox                        */
+    image-rendering: -o-crisp-edges;            /* Opera                          */
+    image-rendering: -webkit-optimize-contrast; /* Chrome (and eventually Safari) */
+    image-rendering: pixelated;                 /* Universal support since 2021   */
+    image-rendering: optimize-contrast;         /* CSS3 Proposed                  */
+    -ms-interpolation-mode: nearest-neighbor;   /* IE8+                           */
+
+}
+
 #bg {
     display: flex;
 	min-height: 100vh;
@@ -86,7 +97,7 @@ div, p {
 	display: flex;
 	flex-direction: row;
 	width: 100%;
-	height: 63.5%;
+	height: 64%;
 	padding-left: 2%;
 	box-sizing: border-box;
 	gap: 5%;
@@ -102,9 +113,9 @@ div, p {
 #content {
     background-color: rgb(204, 214, 238);
 	font-family: 'Mrs Eaves';
-    width: 71%;
-    height: 60.5%;
-	margin-top: 4%;
+    width: 71.5%;
+    height: 58%;
+	margin-top: 5%;
 	box-sizing: border-box;
 	text-align: center;
     animation: heavyFlicker 1s ease-in;
@@ -114,8 +125,8 @@ div, p {
 
 #second-row {
 	width: 100%;
-	height: 30%;
-	padding-left: 23%;
+	height: 29%;
+	padding-left: 24%;
 	box-sizing: border-box;
 }
 
@@ -125,7 +136,7 @@ div, p {
 	font-family: 'Mrs Eaves';
     animation: heavyFlicker 1s ease-in;
     box-shadow: 0 0 20px rgba(255, 108, 78, 0.2);
-	width: 87%;
+	width: 87.5%;
 	height: 100%;
 	box-sizing: border-box;
 	overflow: auto;
