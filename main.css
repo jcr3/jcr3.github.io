@@ -100,7 +100,7 @@ div, p {
 	height: 61.4%;
 	padding-left: 10.8%;
 	box-sizing: border-box;
-	gap: 4.9%;
+	gap: 4.7%;
 }
 
 #nav-bar {
@@ -110,7 +110,7 @@ div, p {
     display: flex;
     flex-direction: column;
     gap: 1%;
-    filter: drop-shadow(0px 0px 4px rgba(18, 20, 18, 1));
+    filter: drop-shadow(0px 0px 4px rgba(18, 20, 18, 0.5));
 }
 
 .button-container {
@@ -130,15 +130,18 @@ div, p {
     width: 100%;
     text-align: center;
     overflow: auto;
+    cursor: pointer;
+    font-size: min(1.6vw, 16px);
 }
 
 .button {
     width: 100%;
     grid-area: 1 / 1;
+    cursor: pointer;
 }
 
 #content {
-    width: 59.1%;
+    width: 59.5%;
     height: 58%;
 	margin-top: 4%;
 	box-sizing: border-box;
