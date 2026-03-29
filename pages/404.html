@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="icon" href="/favicon.ico">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>404</title>
+		<link rel="stylesheet" crossorigin href="/main.css">
+	</head>
+	<body>
+		<div class="page">
+            <br>
+            <h2>
+                Looking for something that's not there I see...
+            </h2>
+            <a href="/pages/welcome.html" onclick="route()">Go Home</a>
+			<script>
+				const route = (event) => {
+					window.parent.window.location.hash = "/";
+				};
+			</script>
+        </div>
+  	</body>
+</html>
