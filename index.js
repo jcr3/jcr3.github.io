@@ -1,9 +1,31 @@
 let artwork = document.getElementById("artwork");
 let contentContainer = document.getElementById("content-container");
+let content = document.getElementById("content");
 
 function scaleContent() {
     contentContainer.style.height = `${artwork.scrollHeight}px`;
 }
+
+function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+        content.requestFullscreen();
+    } else {
+    document.exitFullscreen();
+    }
+}
+
+function popOut() {
+    window.open(
+        content.src,
+        '_blank',
+        'width=1200,height=800'
+      );
+}
+
+const fullscreenButton = document.getElementById("fullscreen-button")
+fullscreenButton.onclick = toggleFullscreen;
+const popButton = document.getElementById("pop-button")
+popButton.onclick = popOut;
 
 const bgText = document.getElementById("bg-text");
 // $@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,"^`.
