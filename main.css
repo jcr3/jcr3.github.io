@@ -226,8 +226,17 @@ body {
 }
 .post-nav {
     padding-left: 16px;
+    color: rgba(0,0,255,0.5);
 }
-
+.share-link {
+    font-size: 12px;
+    text-decoration: none;
+    color: rgba(0,0,255,0.5);
+    cursor: pointer;
+}
+.post-nav:hover, .share-link:hover {
+    color: blue;
+}
 .post {
     padding-top: 44px;
 }

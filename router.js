@@ -14,9 +14,18 @@ const routes = {
 
 const handleLocation = async () => {
     const path = window.location.hash.replace("#", "") || "/";
-    const route = routes[path] || "pages/404.html";
+    const content = document.getElementById("content");
 
-    document.getElementById("content").src = route;
+    const blogPost = path.match(
+        /^\/blog\/(\d{4}-\d{2}-\d{2})$/
+    );
+
+    if (blogPost) {
+        content.src = `/pages/blog.html#${blogPost[1]}`;
+        return;
+    }
+
+    content.src = routes[path] || "pages/404.html";
 };
 
 window.addEventListener("hashchange", handleLocation);

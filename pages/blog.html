@@ -41,35 +41,53 @@
 					const navBar = document.getElementById("blog-nav");
 					const blogContent = document.getElementById("blog-content");
 					const blog_map = data;
-
-					Object.entries(blog_map).forEach(([year, months]) => {
+					
+					Object.entries(blog_map)
+					.sort(([a], [b]) => Number(b) - Number(a))
+					.forEach(([year, months]) => {
 						const yearEl = document.createElement("div");
 						yearEl.innerText = year;
 						yearEl.classList.add("year");
 						navBar.appendChild(yearEl);
-						Object.entries(months).forEach(([month, days]) => {
+						Object.entries(months)
+						.sort(([a], [b]) => Number(b) - Number(a))
+						.forEach(([month, days]) => {
 							const monthEl = document.createElement("div");
 							monthEl.innerText = monthExpander(month);
 							monthEl.classList.add("month");
 							yearEl.appendChild(monthEl);
-							Object.entries(days).forEach(([day, post_info]) => {
+							Object.entries(days)
+							.sort(([a], [b]) => Number(b) - Number(a))
+							.forEach(([day, post_info]) => {
+								const shareLink = document.createElement("a");
+								shareLink.innerText = 'Share ⧉';
+								shareLink.classList.add("share-link");
+								shareLink.onclick = () => {
+									navigator.clipboard.writeText(`https://jc3.red/blog/${year}-${month}-${day}`);
+									alert(`Copied link: https://jc3.red/blog/${year}-${month}-${day}`);
+								}
+
 								// nav bar
 								const postNavEl = document.createElement("a");
-								postNavEl.innerText = post_info.title
+								postNavEl.innerText = post_info.title;
 								postNavEl.href = `#${year}-${month}-${day}`
 								postNavEl.onclick = navbar;
 								postNavEl.classList.add("post-nav");
+
 								monthEl.appendChild(postNavEl);
+
+								const postEl = document.createElement("div");
+								postEl.classList.add("post");
+								postEl.id = `${year}-${month}-${day}`;
+								blogContent.appendChild(postEl);
 
 								// post
 								fetch(`blogs/${post_info.path}`)
 								.then((response) => response.text())
 								.then((data) => {
-									const postEl = document.createElement("div");
 									postEl.innerHTML = marked.parse(data);
-									postEl.classList.add("post");
-									postEl.id = `${year}-${month}-${day}`;
-									blogContent.appendChild(postEl);;
+									postEl.innerHTML += "<br>"
+									postEl.appendChild(shareLink);
 								})
 							});
 						});
