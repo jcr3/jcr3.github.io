@@ -6,13 +6,123 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Blog</title>
 		<link rel="stylesheet" crossorigin href="/main.css">
+		<script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+		<script>
+			function navbar() {
+				const navBar = document.getElementById("blog-nav");
+				if (navBar.style.display == 'flex') {
+					navBar.style.display = 'none';
+				} else {
+					navBar.style.display = 'flex';
+				}
+			}
+			function monthExpander(month) {
+				let monthExapnded
+				switch (month) {
+					case ('01'): monthExapnded = 'January'; break;
+					case ('02'): monthExapnded = 'February'; break;
+					case ('03'): monthExapnded = 'March'; break;
+					case ('04'): monthExapnded = 'April'; break;
+					case ('05'): monthExapnded = 'May'; break;
+					case ('06'): monthExapnded = 'June'; break;
+					case ('07'): monthExapnded = 'July'; break;
+					case ('08'): monthExapnded = 'August'; break;
+					case ('09'): monthExapnded = 'September'; break;
+					case ('10'): monthExapnded = 'October'; break;
+					case ('11'): monthExapnded = 'November'; break;
+					case ('12'): monthExapnded = 'December'; break;
+				}
+				return monthExapnded
+			}
+			document.addEventListener("DOMContentLoaded", () => {
+				fetch("blogs/blog_map.json")
+				.then((response) => response.json())
+				.then((data) => {
+					const navBar = document.getElementById("blog-nav");
+					const blogContent = document.getElementById("blog-content");
+					const blog_map = data;
+
+					Object.entries(blog_map).forEach(([year, months]) => {
+						const yearEl = document.createElement("div");
+						yearEl.innerText = year;
+						yearEl.classList.add("year");
+						navBar.appendChild(yearEl);
+						Object.entries(months).forEach(([month, days]) => {
+							const monthEl = document.createElement("div");
+							monthEl.innerText = monthExpander(month);
+							monthEl.classList.add("month");
+							yearEl.appendChild(monthEl);
+							Object.entries(days).forEach(([day, post_info]) => {
+								// nav bar
+								const postNavEl = document.createElement("a");
+								postNavEl.innerText = post_info.title
+								postNavEl.href = `#${year}-${month}-${day}`
+								postNavEl.onclick = navbar;
+								postNavEl.classList.add("post-nav");
+								monthEl.appendChild(postNavEl);
+
+								// post
+								fetch(`blogs/${post_info.path}`)
+								.then((response) => response.text())
+								.then((data) => {
+									const postEl = document.createElement("div");
+									postEl.innerHTML = marked.parse(data);
+									postEl.classList.add("post");
+									postEl.id = `${year}-${month}-${day}`;
+									blogContent.appendChild(postEl);;
+								})
+							});
+						});
+					});
+				})
+				.catch((error) => console.error("could not load blogs"));
+			});
+		</script>
 	</head>
 	<body>
-		<div class="page">
-            <br>
-            <h2>
-                Blog!
-            </h2>
+		<div class="page" style="position: relative;">
+			<div id="blog-nav" 
+			     style="
+					display: none;
+					flex-direction: column;
+					position: fixed;
+					top: 0; right: 0;
+					z-index: 1;
+					text-align: left;
+					background-color: rgb(204, 214, 238);
+					border-left: 1px solid black;
+					padding: 0 8px 0 8px;
+					height: 100vh;
+					min-width: 15vw;
+					max-width: 30vw;
+				"
+			>
+				<p class="blog-nav-button"
+				   style="font-size: 20px; width: 100%; text-align: right;"
+				   onclick="navbar()"
+				>
+				   x
+				</p>
+			</div>
+			<div id="title-bar"
+				style="
+					display: flex;
+					position: fixed;
+					left: 0;
+					width: 100%;
+					padding-bottom: 2px;
+					border-bottom: 1px solid black;
+					background-color: rgb(204, 214, 238);
+				">
+				<h2 style="flex: 1 1 auto; margin: 0;">
+                	JC3'S BLOG
+            	</h2>
+				<h2 class='blog-nav-button' onclick="navbar()">
+					+
+				</h2>
+			</div>
+			<div id="blog-content" style="text-align: left; width: 100%;">
+			</div>
         </div>
   	</body>
 </html>

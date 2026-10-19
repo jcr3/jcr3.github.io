@@ -18,7 +18,7 @@ function popOut() {
     window.open(
         content.src,
         '_blank',
-        'width=1200,height=800'
+        //'width=1200,height=800'
       );
 }
 

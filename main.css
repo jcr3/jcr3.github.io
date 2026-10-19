@@ -166,23 +166,70 @@ div, p {
 	overflow: auto;
 }
 
+body {
+    display: flex;
+    justify-content: center;
+    background-color: rgb(204, 214, 238);
+}
 .page {
     background-color: rgb(204, 214, 238);
 	text-align: center;
 	font-family: 'Mrs Eaves';
+    padding: 4px;
+    width: min(900px, 100vw);
 }
 
-#fullscreen-button, #pop-button {
+#fullscreen-button, #pop-button, #home-button {
     text-align: center;
     padding: 3%;
     cursor: pointer;
     font-weight: bold;
-    color: rgba(255,255,255,0.5);
     font-size: min(3vw, 24px);
+    color: rgba(255,255,255,0.5);
 }
-#fullscreen-button:hover, #pop-button:hover  {
+#fullscreen-button:hover, #pop-button:hover, #home-button:hover  {
     scale: 120%;
     color: white;
+}
+.blog-nav-button{
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 30px;
+    margin: 0;
+    padding-right: 12px;
+    color: rgba(0,0,0,0.5);
+}
+.blog-nav-button:hover {
+    color: black;
+}
+
+#blog-content div h1,
+#blog-content div h2,
+#blog-content div h3 {
+    margin: 4px 0 4px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.5);
+}
+#blog-content div h4,
+#blog-content div h5,
+#blog-content div h6 {
+    margin: 4px 0 4px 0;
+}
+
+.year {
+    display: flex;
+    flex-direction: column;
+}
+.month {
+    display: flex;
+    flex-direction: column;
+    padding-left: 8px;
+}
+.post-nav {
+    padding-left: 16px;
+}
+
+.post {
+    padding-top: 44px;
 }
 
 @keyframes heavyFlicker {

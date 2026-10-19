@@ -8,9 +8,7 @@ const routes = {
     404: "/pages/404.html",
     "/": "pages/welcome.html",
     "/blog": "/pages/blog.html",
-    "/artworks": "/pages/artworks.html",
-    "/projects": "/pages/projects.html",
-    "/archive": "/pages/archive.html",
+    "/contact": "/pages/contact.html",
     "/links": "/pages/links.html",
 };
 

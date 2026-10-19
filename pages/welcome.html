@@ -9,37 +9,82 @@
         <script>
             document.addEventListener("DOMContentLoaded", () => {
                 const faceText = document.getElementById("face");
-                let count = 0;
+                let faceCount = 0;
                 function blink() {
                     if (faceText != null) {
-                        if (count == 0) faceText.textContent = '-_-';
-                        else if (Math.random() > 0.5 && count == 2) faceText.textContent = '-_-';
+                        if (faceCount == 0) faceText.textContent = '-_-';
+                        else if (Math.random() > 0.5 && faceCount == 2) faceText.textContent = '-_-';
                         else faceText.textContent = '^_^';
-                        count++;
-                        if (count > 20) count = 0;
+                        faceCount++;
+                        if (faceCount > 20) faceCount = 0;
                     }
                 }
                 var blinkInterval = setInterval(blink, 100);
+                const waveText = document.getElementById("waves");
+                let waveCount = 0;
+                function wave() {
+                    if (waveText != null) {
+                        switch (waveCount) {
+                            case(0):
+                                waveText.textContent = '_.~"(_.~"(_.~"(_.~"(_.~"(';
+                                waveCount++;
+                                break;
+                            case(1):
+                                waveText.textContent = '(_.~"(_.~"(_.~"(_.~"(_.~"';
+                                waveCount++;
+                                break;
+                            case(2):
+                                waveText.textContent = '"(_.~"(_.~"(_.~"(_.~"(_.~';
+                                waveCount++;
+                                break;
+                            case(3):
+                                waveText.textContent = '~"(_.~"(_.~"(_.~"(_.~"(_.';
+                                waveCount++;
+                                break;
+                            case(4):
+                                waveText.textContent = '.~"(_.~"(_.~"(_.~"(_.~"(_';
+                                waveCount = 0;
+                                break;
+                        }
+                    }
+                }
+                var waveInterval = setInterval(wave, 120);
             });
         </script>
 	</head>
 	<body>
 		<div class="page">
             <br>
-            <img src="/assets/pic.jpg" style="width: 50%;">
+            <img src="/assets/pic.jpg" style="width: 40%;">
             <h1>
                 Hi I'm JC! Welcome to my website!
-                <br>
                 <br>
             </h1>
             <h2 id="face">
                 ^_^
             </h2>
+            I do all sorts of art, music, design, and engineering and post about the process here.
             <br>
-            Here is a ton more text so I can test out the scrolling capabilities of this.
             <br>
-            ___
+            In the navigation bar to the left you can find my blog, portfolio website,
+            a link to sign up to my news letter, contact info, and some websites that I like.
+            There's also a home button, a fullscreen button, and a pop-out in new tab button,
+            which will probably be your friends on mobile.
             <br>
+            <br>
+            Have a look around, leave any comments in the chat room below and
+            if you like what you see sign up for my news letter!
+            <br>
+            <br>
+            Thanks for being here &lt3
+            <br>
+            <br>-JC
+            <br>
+            <br>
+            <br>
+            <p id="waves">
+                _.~"&lpar;_.~"&lpar;_.~"&lpar;_.~"&lpar;_.~"&lpar;
+            </p>
             <br>
         </div>
   	</body>
