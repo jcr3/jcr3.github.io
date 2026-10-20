@@ -38,7 +38,7 @@
 				fetch("blogs/blog_map.json")
 				.then((response) => response.json())
 				.then((data) => {
-					const navBar = document.getElementById("blog-nav");
+					const navBar = document.getElementById("nav-items");
 					const blogContent = document.getElementById("blog-content");
 					const blog_map = data;
 					
@@ -98,7 +98,7 @@
 		</script>
 	</head>
 	<body>
-		<div class="page" style="position: relative;">
+		<div class="page">
 			<div id="blog-nav" 
 			     style="
 					display: none;
@@ -109,10 +109,10 @@
 					text-align: left;
 					background-color: rgb(204, 214, 238);
 					border-left: 1px solid black;
-					padding: 0 8px 0 8px;
 					height: 100vh;
 					min-width: 15vw;
-					max-width: 30vw;
+					max-width: 70vw;
+					padding-right: 4px;
 				"
 			>
 				<p class="blog-nav-button"
@@ -121,13 +121,17 @@
 				>
 				   x
 				</p>
+				<div id="nav-items" style="
+					height: 100%; width: 100%; overflow-y: auto; 
+					overflow-x: hidden; padding: 0 8px 0 8px;"
+				>
+				</div>
 			</div>
 			<div id="title-bar"
 				style="
 					display: flex;
-					position: fixed;
-					left: 0;
 					width: 100%;
+					height: 28px;
 					padding-bottom: 2px;
 					border-bottom: 1px solid black;
 					background-color: rgb(204, 214, 238);
@@ -139,7 +143,12 @@
 					+
 				</h2>
 			</div>
-			<div id="blog-content" style="text-align: left; width: 100%;">
+			<div id="blog-content" 
+				class="page-content"
+				style="
+					text-align: left; width: calc(100% - 8px);
+					height: calc(100% - 30.8px - 8px); overflow-y: auto; overflow-x: hidden;"
+			>
 			</div>
         </div>
   	</body>

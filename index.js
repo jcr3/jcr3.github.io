@@ -1,6 +1,7 @@
 let artwork = document.getElementById("artwork");
 let contentContainer = document.getElementById("content-container");
 let content = document.getElementById("content");
+let chatRoom = document.getElementById('chat-room');
 
 function scaleContent() {
     contentContainer.style.height = `${artwork.scrollHeight}px`;
@@ -22,10 +23,29 @@ function popOut() {
       );
 }
 
-const fullscreenButton = document.getElementById("fullscreen-button")
+function flicker() {
+    let contentEl = document.getElementById('content');
+    let chatRoomEl = document.getElementById('chat-room');
+    contentEl.classList.add('start-flicker');
+    chatRoomEl.classList.add('start-flicker');
+    setTimeout(() => {
+        contentEl.classList.remove('start-flicker');
+        chatRoomEl.classList.remove('start-flicker');
+    }, 1000)
+    
+}
+
+const fullscreenButton = document.getElementById("fullscreen-button");
 fullscreenButton.onclick = toggleFullscreen;
-const popButton = document.getElementById("pop-button")
+const popButton = document.getElementById("pop-button");
 popButton.onclick = popOut;
+
+const powerButton = document.getElementById("power-button");
+powerButton.onclick = flicker;
+setTimeout(() => {
+    content.classList.remove('start-flicker');
+    chatRoom.classList.remove('start-flicker');
+}, 1000)
 
 const bgText = document.getElementById("bg-text");
 // $@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,"^`.

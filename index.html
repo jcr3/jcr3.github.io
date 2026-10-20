@@ -21,6 +21,9 @@
       		<div id="fg-container">
         		<img id="artwork" class="pixel-art" src="/assets/pixel3.gif">
         		<img id="frame" class="pixel-art" src="/assets/pixel3f.png">
+				<img id="guy" class="pixel-art" src="/assets/guy.gif"
+					onclick='alert(`"Stop poking me!"`)'>
+				<img id="power-button" class="pixel-art" src="/assets/buttons/front_button.png">
 				<div id="content-container" class="crt">
 					<div id="first-row">
 						<div id="nav-bar">
@@ -47,7 +50,7 @@
 							<div style="display: flex; flex-direction: row; justify-content: end; align-items: center;">
 								<a id="home-button"
 								   href="#/" onclick="route()"
-								   style="font-size: 21px; text-decoration: none;"
+								   style="font-size: min(2.5vw, 21px); text-decoration: none;"
 								>
 								   家
 								</a>
@@ -55,11 +58,11 @@
 								<p id="pop-button">↗</p>
 							</div>
 						</div>
-						<iframe src="/pages/welcome.html" id="content" class="page">
+						<iframe src="/pages/welcome.html" id="content" class="page start-flicker">
 						</iframe>
 					</div>
 					<div id="second-row">
-						<iframe src="https://www5.cbox.ws/box/?boxid=962189&boxtag=xVwRp3" id="chat-room" class="page"></iframe>
+						<iframe src="https://www5.cbox.ws/box/?boxid=962189&boxtag=xVwRp3" id="chat-room" class="page start-flicker"></iframe>
 					</div>
 				</div>
 			</div>
