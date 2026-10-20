@@ -87,9 +87,11 @@
 								const shareLink = document.createElement("a");
 								shareLink.innerText = 'Share ⧉';
 								shareLink.classList.add("share-link");
+								const url = `https://jc3.red/#/blog/${pageNum}-${year}-${month}-${day}`;
+								console.log(url);
 								shareLink.onclick = () => {
-									navigator.clipboard.writeText(`https://jc3.red/#/blog/${pageNum}-${year}-${month}-${day}`);
-									alert(`Copied link: https://jc3.red/#/blog/${pageNum}-${year}-${month}-${day}`);
+									navigator.clipboard.writeText(url);
+									alert(`Copied link: ${url}`);
 								}
 
 								// nav bar
