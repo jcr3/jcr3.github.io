@@ -8,7 +8,7 @@
 		<link rel="stylesheet" crossorigin href="/main.css">
 		<script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
 		<script>
-			function navbar() {
+			function toggleNavbar() {
 				const navBar = document.getElementById("blog-nav");
 				if (navBar.style.display == 'flex') {
 					navBar.style.display = 'none';
@@ -35,6 +35,22 @@
 				return monthExapnded
 			}
 			document.addEventListener("DOMContentLoaded", () => {
+				function navToPost(pageNum, id) {
+					if (currentPage != pageNum) {
+						showPage(pageNum);
+					}
+					document.getElementById(id).scrollIntoView();
+
+					toggleNavbar();
+				}
+
+				const pageNumEl = document.getElementById('page-num');
+				const prevEl = document.getElementById('prev');
+				const nextEl = document.getElementById('next');
+				const pages = [[]];
+				const maxPostsOnPage = 3;
+				let currentPage = 0;
+
 				fetch("blogs/blog_map.json")
 				.then((response) => response.json())
 				.then((data) => {
@@ -42,6 +58,8 @@
 					const blogContent = document.getElementById("blog-content");
 					const blog_map = data;
 					
+					let postCount = 0
+					let pageNum = 0
 					Object.entries(blog_map)
 					.sort(([a], [b]) => Number(b) - Number(a))
 					.forEach(([year, months]) => {
@@ -68,10 +86,9 @@
 								}
 
 								// nav bar
-								const postNavEl = document.createElement("a");
+								const postNavEl = document.createElement("p");
 								postNavEl.innerText = post_info.title;
-								postNavEl.href = `#${year}-${month}-${day}`
-								postNavEl.onclick = navbar;
+								postNavEl.onclick = navToPost.bind(postNavEl, pageNum, `${year}-${month}-${day}`);
 								postNavEl.classList.add("post-nav");
 
 								monthEl.appendChild(postNavEl);
@@ -80,6 +97,15 @@
 								postEl.classList.add("post");
 								postEl.id = `${year}-${month}-${day}`;
 								blogContent.appendChild(postEl);
+
+								// store page structure
+								pages[pageNum].push(`${year}-${month}-${day}`);
+								postCount = postCount + 1;
+								if (postCount == maxPostsOnPage) {
+									pageNum = pageNum + 1;
+									pages.push([])
+									postCount = 0;
+								}
 
 								// post
 								fetch(`blogs/${post_info.path}`)
@@ -92,8 +118,66 @@
 							});
 						});
 					});
+					// clean up if num of posts is divisible by num of posts on a page
+					if (pages[pages.length - 1].length == 0) {
+						pages.pop();
+					}
+					showPage(0);
 				})
 				.catch((error) => console.error("could not load blogs"));
+
+				function showPage(pageNum) {
+					Object.entries(pages).forEach(([index, ids]) => {
+						if (index != pageNum) {
+							ids.forEach((id) => {
+								post = document.getElementById(id);
+								post.style.display = 'none';
+							});
+						} else {
+							ids.forEach((id) => {
+								post = document.getElementById(id);
+								post.style.display = 'inline';
+							});
+						}
+					});
+					currentPage = pageNum;
+
+					pageNumEl.innerText = `| ${currentPage + 1} |`;
+
+					if (pages.length == 1) {
+						prevEl.classList.add('unactive-link');
+						nextEl.classList.add('unactive-link');
+					}
+					else if (currentPage == 0) {
+						prevEl.classList.add('unactive-link');
+						nextEl.classList.remove('unactive-link');
+					}
+					else if (currentPage == pages.length - 1) {
+						prevEl.classList.remove('unactive-link');
+						nextEl.classList.add('unactive-link');
+					}
+					else {
+						prevEl.classList.remove('unactive-link');
+						nextEl.classList.remove('unactive-link');
+					}
+				}
+
+				function prevPage() {
+					if (currentPage > 0) {
+						currentPage = currentPage - 1;
+						showPage(currentPage);
+					}
+				}
+
+				function nextPage() {
+					if (currentPage < pages.length - 1) {
+						currentPage = currentPage + 1;
+						showPage(currentPage);
+					}
+				}
+
+				prevEl.onclick = prevPage;
+				nextEl.onclick = nextPage;
 			});
 		</script>
 	</head>
@@ -117,7 +201,7 @@
 			>
 				<p class="blog-nav-button"
 				   style="font-size: 20px; width: 100%; text-align: right;"
-				   onclick="navbar()"
+				   onclick="toggleNavbar()"
 				>
 				   x
 				</p>
@@ -139,16 +223,31 @@
 				<h2 style="flex: 1 1 auto; margin: 0;">
                 	JC3'S BLOG
             	</h2>
-				<h2 class='blog-nav-button' onclick="navbar()">
+				<h2 class='blog-nav-button' onclick="toggleNavbar()">
 					+
 				</h2>
 			</div>
-			<div id="blog-content" 
-				class="page-content"
+			<div class="page-content"
 				style="
 					text-align: left; width: calc(100% - 8px);
 					height: calc(100% - 30.8px - 8px); overflow-y: auto; overflow-x: hidden;"
 			>
+				<div id="blog-content">
+				</div>
+				<div style="width: 100%; display: flex; justify-content: center; gap: 8px;">
+					<p id="prev"
+						class="share-link"
+						style="cursor: pointer;"
+					>&lt&lt prev</p>
+					<p id="page-num"
+						style="font-size: 12px; text-decoration: none;
+							color: rgba(0,0,255,0.5); cursor: default;"
+					>| 1 |</p>
+					<p id="next"
+						class="share-link"
+						style="cursor: pointer;"
+					>next &gt&gt</p>
+				</div>
 			</div>
         </div>
   	</body>
