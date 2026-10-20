@@ -283,6 +283,12 @@ body {
     padding: 16px 0 16px 0;
 }
 
+@media (max-width: 370px) {
+    #my-buttons {
+        flex-direction: column;
+    }
+}
+
 @keyframes heavyFlicker {
     0% {
       	filter: opacity(1);
