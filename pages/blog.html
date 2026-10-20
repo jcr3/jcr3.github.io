@@ -35,27 +35,34 @@
 				return monthExapnded
 			}
 			document.addEventListener("DOMContentLoaded", () => {
-				function navToPost(pageNum, id) {
-					if (currentPage != pageNum) {
-						showPage(pageNum);
-					}
-					document.getElementById(id).scrollIntoView();
-
-					toggleNavbar();
-				}
-
 				const pageNumEl = document.getElementById('page-num');
 				const prevEl = document.getElementById('prev');
 				const nextEl = document.getElementById('next');
+				const navBar = document.getElementById("nav-items");
+				const blogContent = document.getElementById("blog-content");
+				const pageContent = document.getElementById("page-content");
 				const pages = [[]];
 				const maxPostsOnPage = 3;
 				let currentPage = 0;
 
+				function navToPost(pageNum, id, toggleNav=true) {
+					if (currentPage != pageNum) {
+						showPage(pageNum);
+					}
+					const post = document.getElementById(id);
+					pageContent.scrollTo({
+						top: post.getBoundingClientRect().top -
+							 pageContent.getBoundingClientRect().top +
+							 pageContent.scrollTop
+					});
+
+					if (toggleNav) toggleNavbar();
+				}
+				window.navToPost = navToPost;
+
 				fetch("blogs/blog_map.json")
 				.then((response) => response.json())
 				.then((data) => {
-					const navBar = document.getElementById("nav-items");
-					const blogContent = document.getElementById("blog-content");
 					const blog_map = data;
 					
 					let postCount = 0
@@ -81,8 +88,8 @@
 								shareLink.innerText = 'Share ⧉';
 								shareLink.classList.add("share-link");
 								shareLink.onclick = () => {
-									navigator.clipboard.writeText(`https://jc3.red/#/blog/${year}-${month}-${day}`);
-									alert(`Copied link: https://jc3.red/#/blog/${year}-${month}-${day}`);
+									navigator.clipboard.writeText(`https://jc3.red/#/blog/${pageNum}-${year}-${month}-${day}`);
+									alert(`Copied link: https://jc3.red/#/blog/${pageNum}-${year}-${month}-${day}`);
 								}
 
 								// nav bar
@@ -123,6 +130,11 @@
 						pages.pop();
 					}
 					showPage(0);
+				})
+				.then(() => {
+					setTimeout(() => {
+						window.parent.postMessage({ type: "blog-ready" }, "*");
+					}, 100);
 				})
 				.catch((error) => console.error("could not load blogs"));
 
@@ -227,7 +239,7 @@
 					+
 				</h2>
 			</div>
-			<div class="page-content"
+			<div id="page-content" class="page-content"
 				style="
 					text-align: left; width: calc(100% - 8px);
 					height: calc(100% - 30.8px - 8px); overflow-y: auto; overflow-x: hidden;"
