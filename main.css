@@ -248,13 +248,41 @@ body {
 #blog-content div h1,
 #blog-content div h2,
 #blog-content div h3 {
-    margin: 4px 0 4px 0;
+    margin: 4px 0 0px 0;
     border-bottom: 1px solid rgba(0,0,0,0.5);
+    background-color: rgba(0,0,255,0.1);
+    padding-bottom: 0px;
 }
 #blog-content div h4,
 #blog-content div h5,
 #blog-content div h6 {
-    margin: 4px 0 4px 0;
+    margin: 4px 0px 4px 0;
+    padding: 8px 0 0 8px;
+}
+#blog-content div blockquote {
+    margin: 4px 4px 4px 12px;
+    padding: 4px;
+    border-left: 1px solid black;
+    background-color: rgba(0,0,255,0.1);
+}
+#blog-content div article {
+    columns: 2 150px;
+    column-gap: 8px;
+    padding: 0 8px 0 16px;
+}
+#blog-content div section {
+    padding: 0 8px 0 16px;
+}
+#blog-content div ul, 
+#blog-content div ol {
+    margin: 4px;
+    margin-bottom: 0px;
+}
+#blog-content div li {
+    border-left: 1px solid black;
+    background-color: rgba(0,0,255,0.1);
+    margin-bottom: 4px;
+    padding-left: 4px;
 }
 
 .year {
