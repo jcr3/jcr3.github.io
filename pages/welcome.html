@@ -20,72 +20,48 @@
                     }
                 }
                 var blinkInterval = setInterval(blink, 100);
-                const waveText = document.getElementById("waves");
-                let waveCount = 0;
-                function wave() {
-                    if (waveText != null) {
-                        switch (waveCount) {
-                            case(0):
-                                waveText.textContent = '_.~"(_.~"(_.~"(_.~"(_.~"(';
-                                waveCount++;
-                                break;
-                            case(1):
-                                waveText.textContent = '(_.~"(_.~"(_.~"(_.~"(_.~"';
-                                waveCount++;
-                                break;
-                            case(2):
-                                waveText.textContent = '"(_.~"(_.~"(_.~"(_.~"(_.~';
-                                waveCount++;
-                                break;
-                            case(3):
-                                waveText.textContent = '~"(_.~"(_.~"(_.~"(_.~"(_.';
-                                waveCount++;
-                                break;
-                            case(4):
-                                waveText.textContent = '.~"(_.~"(_.~"(_.~"(_.~"(_';
-                                waveCount = 0;
-                                break;
-                        }
-                    }
-                }
-                var waveInterval = setInterval(wave, 120);
             });
         </script>
 	</head>
 	<body>
 		<div class="page">
             <div class="page-content">
-                <br>
-                <img src="/assets/pic.jpg" style="width: 40%;">
-                <h1>
+                <h1 style="margin-bottom: 0;">
                     Hi I'm JC! Welcome to my website!
-                    <br>
                 </h1>
-                <h2 id="face">
+                <h2 id="face" style="margin-top: 0;">
                     ^_^
                 </h2>
-                I do all sorts of art, music, design, and engineering and post about the process here.
+                <div style="
+                    display: flex;
+                    width: 95%;
+                    margin-left: 2.5%;
+                    align-items: flex-start;
+                ">
+                    <img src="/assets/me/changsha.jpg" style="width: auto; height: auto; max-height: 96px; min-width: 0; flex: 1 1 auto;">
+                    <img src="/assets/me/dali.jpg" style="width: auto; height: auto; max-height: 96px; min-width: 0; flex: 1 1 auto;">
+                    <img src="/assets/me/glasgow.jpg" style="width: auto; height: auto; max-height: 96px; min-width: 0; flex: 1 1 auto;">
+                    <img src="/assets/me/dq.jpg" style="width: auto; height: auto; max-height: 96px; min-width: 0; flex: 1 1 auto;">
+                    <img src="/assets/me/paris.jpg" style="width: auto; height: auto; max-height: 96px; min-width: 0; flex: 1 1 auto;">
+                    <img src="/assets/me/guangzhou.jpg" style="width: auto; height: auto; max-height: 96px; min-width: 0; flex: 1 1 auto;">
+                </div>
+                <br>
+                I do art, music, design, and engineering.
                 <br>
                 <br>
-                In the navigation bar to the left you can find my blog, portfolio website,
-                a link to sign up to my news letter, contact info, and some websites that I like.
-                There's also a home button, a fullscreen button, and a pop-out in new tab button,
-                which will probably be your friends on mobile.
+                You can find my blog among other things in the navigation bar to the left. There's also home,
+                fullscreen, and pop-out in new tab buttons, which will probably be your friends on mobile.
                 <br>
                 <br>
-                Have a look around, leave any comments in the chat room below and
-                if you like what you see sign up for my news letter!
+                There's also a chat room in the window below...
                 <br>
                 <br>
                 Thanks for being here &lt3
                 <br>
-                <br>-JC
+                <br>-JC3
                 <br>
                 <br>
                 <br>
-                <p id="waves">
-                    _.~"&lpar;_.~"&lpar;_.~"&lpar;_.~"&lpar;_.~"&lpar;
-                </p>
                 <br>
             </div>
         </div>

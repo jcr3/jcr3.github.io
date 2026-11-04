@@ -288,11 +288,15 @@ body {
     margin: 4px 0px 4px 0;
     padding: 8px 0 0 8px;
 }
+#blog-content div p {
+    margin-bottom: 8px;
+}
 #blog-content div blockquote {
     margin: 4px 4px 4px 12px;
     padding: 4px;
     border-left: 1px solid black;
     background-color: rgba(0,0,255,0.1);
+    width: fit-content;
 }
 #blog-content div article {
     columns: 2 150px;
@@ -306,12 +310,15 @@ body {
 #blog-content div ol {
     margin: 4px;
     margin-bottom: 0px;
+    padding-left: 12px;
 }
 #blog-content div li {
     border-left: 1px solid black;
     background-color: rgba(0,0,255,0.1);
     margin-bottom: 4px;
     padding-left: 4px;
+    padding-right: 4px;
+    width: fit-content;
 }
 
 .year {
