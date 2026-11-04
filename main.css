@@ -110,6 +110,35 @@ div, p {
     scale: 85%;
 }
 
+#top-links {
+    width: 11.5%;
+    margin-left: 69%;
+    margin-top: 12.5%;
+    grid-area: 1 / 1;
+    box-sizing: border-box;
+    align-self: start;
+    z-index: 3;
+    
+    display: flex;
+    flex-direction: row;
+    gap: min(0.4vw, 4px);
+    text-align: center;
+
+    font-family: 'Terminal Grotesque';
+    text-transform: uppercase;
+    color: rgba(162, 238, 255, 0.5)
+}
+
+.top-link {
+    font-size: min(1.4vw, 16px);
+    text-decoration: none;
+    color: rgba(162, 238, 255, 0.5) !important;
+    cursor: pointer;
+}
+.top-link:hover {
+    color: rgba(162, 238, 255, 1) !important;
+}
+
 #content-container {
     grid-area: 1 / 1;
     display: flex;
@@ -299,6 +328,10 @@ body {
     color: rgba(0,0,255,0.5);
     cursor: pointer;
     text-decoration: underline;
+}
+.share-link-container {
+    width: calc(100% - 24px);
+    text-align: center;
 }
 .share-link {
     font-size: 12px;

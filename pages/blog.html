@@ -46,6 +46,7 @@
 				let currentPage = 0;
 
 				function navToPost(pageNum, id, toggleNav=true) {
+					console.log(`Loading Page: ${pageNum}, Blog: ${id}`);
 					if (currentPage != pageNum) {
 						showPage(pageNum);
 					}
@@ -85,8 +86,11 @@
 							.sort(([a], [b]) => Number(b) - Number(a))
 							.forEach(([day, post_info]) => {
 								const shareLink = document.createElement("a");
+								const shareLinkContainer = document.createElement("section");
 								shareLink.innerText = 'Share ⧉';
 								shareLink.classList.add("share-link");
+								shareLinkContainer.classList.add('share-link-container')
+								shareLink.style.width = '100vw'
 								const url = `https://jc3.red/#/blog/${pageNum}-${year}-${month}-${day}`;
 								console.log(url);
 								shareLink.onclick = () => {
@@ -121,8 +125,9 @@
 								.then((response) => response.text())
 								.then((data) => {
 									postEl.innerHTML = marked.parse(data);
-									postEl.innerHTML += "<br>"
-									postEl.appendChild(shareLink);
+									//postEl.innerHTML += "<br>"
+									shareLinkContainer.appendChild(shareLink);
+									postEl.appendChild(shareLinkContainer);
 								})
 							});
 						});
