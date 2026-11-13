@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="icon" href="/favicon.ico">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Shop</title>
+		<link rel="stylesheet" crossorigin href="/main.css">
+	</head>
+	<style>
+		.shop-item {
+			margin: 4px;
+			padding: 2px;
+			border: 1px solid black;
+			justify-content: start;
+			cursor: pointer;
+			color: black;
+			text-decoration: none;
+		}
+		.shop-item:hover {
+			background-color: rgba(0,0,255,0.1);
+			color: blue;
+			border: 1px solid blue;
+		}
+		.shop-item h4, .shop-item h6, .shop-item p {
+			width: 100%;
+			margin: 0 !important;
+			padding: 0 !important;
+		}
+		.item-img {
+			width: 100%;
+			height: auto;
+		}
+	</style>
+	<body>
+		<div class="page">
+            <div class="page-content">
+				<br>
+				<h2 style="margin: 0;">
+					Shop
+				</h2>
+				<div style="
+					display: grid;
+					grid-template-columns: repeat(auto-fill, 200px);
+    				grid-auto-flow: row;
+					gap: 4px;
+				">
+					<a href="mailto:jc@jc3.red?subject=HoS%20Zine%20Purchase&body=I'd%20like%20to%20purchase%201%20zine%20please."
+						class="shop-item"
+					>
+						<img class="item-img" src="/assets/blog_pics/zine/HoS_2.jpg" alt="zine">
+						<h4>
+							House of Snow Zine (2026)
+						</h4>
+						<p>£5 + shipping</p>
+						<h6>14 available</h6>
+					</a>
+				</div>
+				<br>
+			</div>
+        </div>
+  	</body>
+</html>

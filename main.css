@@ -274,13 +274,19 @@ body {
     color: black;
 }
 
+.date {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
 #blog-content div h1,
 #blog-content div h2,
 #blog-content div h3 {
-    margin: 4px 0 0px 0;
+    margin: 4px 0 0 0;
     border-bottom: 1px solid rgba(0,0,0,0.5);
     background-color: rgba(0,0,255,0.1);
     padding-bottom: 0px;
+    padding-left: 4px;
 }
 #blog-content div h4,
 #blog-content div h5,
@@ -339,6 +345,7 @@ body {
 .share-link-container {
     width: calc(100% - 24px);
     text-align: center;
+    margin-bottom: 16px;
 }
 .share-link {
     font-size: 12px;
