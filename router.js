@@ -19,6 +19,7 @@ const handleLocation = async () => {
 
     if (
         path == "https://portfolio.jc3.red" ||
+        path == "https://jcredmond.bandcamp.com" ||
         path == "https://jc3.kit.com/profile"
     ) {
         content.src = new URL(path).href;
