@@ -17,6 +17,14 @@ const handleLocation = async () => {
     const path = window.location.hash.replace("#", "") || "/";
     const content = document.getElementById("content");
 
+    if (
+        path == "https://portfolio.jc3.red" ||
+        path == "https://jc3.kit.com/profile"
+    ) {
+        content.src = new URL(path).href;
+        return;
+    }
+
     const blogPost = path.match(
         //pagenum-YYYY-MM-DD
         /^\/blog\/(\d+)-(\d{4}-\d{2}-\d{2})$/
