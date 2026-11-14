@@ -122,7 +122,7 @@
 								.then((data) => {
 									postEl.innerHTML = marked.parse(data);
 									postEl.appendChild(shareLink);
-									postEl.innerHTML += "<br>"
+									postEl.appendChild(document.createElement("br"));
 								})
 							});
 						});
