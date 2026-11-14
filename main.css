@@ -342,22 +342,34 @@ body {
     cursor: pointer;
     text-decoration: underline;
 }
-.share-link-container {
-    width: calc(100% - 24px);
-    text-align: center;
-    margin-bottom: 16px;
-}
 .share-link {
+    width: calc(20% - 24px);
+    margin-left: 40%;
+    margin-top: 8px;
+    text-align: center;
+
+    border: 1px solid rgba(0,0,255,0.5);
     font-size: 12px;
     text-decoration: none;
     color: rgba(0,0,255,0.5);
     cursor: copy;
 }
-.post-nav:hover, .share-link:hover {
-    color: blue;
+.share-link:hover {
+    background-color: rgba(0,0,255,0.1);
+    border: 1px solid blue;
+    color: blue !important;
+}
+.page-link {
+    font-size: 12px;
+    text-decoration: none;
+    color: rgba(0,0,255,0.5);
+    cursor: pointer;
 }
 .post {
     padding: 16px 0 16px 0;
+}
+.post-nav:hover, .page-link:hover {
+    color: blue;
 }
 
 .unactive-link {

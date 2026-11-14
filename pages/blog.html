@@ -85,14 +85,10 @@
 							Object.entries(days)
 							.sort(([a], [b]) => Number(b) - Number(a))
 							.forEach(([day, post_info]) => {
-								const shareLink = document.createElement("a");
-								const shareLinkContainer = document.createElement("section");
-								shareLink.innerText = 'Share ⧉';
+								const shareLink = document.createElement("section");
+								shareLink.innerText = 'Share ⛓';
 								shareLink.classList.add("share-link");
-								shareLinkContainer.classList.add('share-link-container');
-								shareLink.style.width = '100vw';
 								const url = `https://jc3.red/#/blog/${pageNum}-${year}-${month}-${day}`;
-								console.log(url);
 								shareLink.onclick = () => {
 									navigator.clipboard.writeText(url);
 									alert(`Copied link: ${url}`);
@@ -125,9 +121,8 @@
 								.then((response) => response.text())
 								.then((data) => {
 									postEl.innerHTML = marked.parse(data);
-									//postEl.innerHTML += "<br>"
-									shareLinkContainer.appendChild(shareLink);
-									postEl.appendChild(shareLinkContainer);
+									postEl.appendChild(shareLink);
+									postEl.innerHTML += "<br>"
 								})
 							});
 						});
@@ -255,16 +250,14 @@
 				</div>
 				<div style="width: 100%; display: flex; justify-content: center; gap: 8px;">
 					<p id="prev"
-						class="share-link"
-						style="cursor: pointer;"
+						class="page-link"
 					>&lt&lt prev</p>
 					<p id="page-num"
 						style="font-size: 12px; text-decoration: none;
 							color: rgba(0,0,255,0.5); cursor: default;"
 					>| 1 |</p>
 					<p id="next"
-						class="share-link"
-						style="cursor: pointer;"
+						class="page-link"
 					>next &gt&gt</p>
 				</div>
 			</div>
